@@ -109,7 +109,6 @@ a:visited {
   margin: 0 auto;
   background-color: var(--bg-base);
   min-height: 100vh;
-  border-radius: 4px;
 }
 
 /* --- Header --- */
@@ -136,6 +135,15 @@ a:visited {
   align-items: center;
   gap: 8px;
   text-decoration: none !important;
+  color: var(--color-base) !important;
+}
+
+.mw-logo:visited {
+  color: var(--color-base) !important;
+}
+
+.mw-logo:visited .mw-logo-wordmark {
+  color: var(--color-base) !important;
 }
 
 .mw-logo-icon {
@@ -197,9 +205,9 @@ a:visited {
 .vector-search-box input {
   width: 100%;
   height: 32px;
-  padding: 4px 12px;
+  padding: 4px 36px 4px 36px;
   border: 1px solid var(--border-base);
-  border-radius: 2px;
+  border-radius: 12px;
   font-size: 0.8125em;
   font-family: var(--font-sans);
   background: var(--bg-base);
@@ -212,25 +220,18 @@ a:visited {
   box-shadow: inset 0 0 0 1px #36c;
 }
 
-.vector-search-box button,
-.vector-search-box-inner button {
+.vector-search-box button[type="submit"],
+.vector-search-box-inner button[type="submit"] {
   position: absolute;
   right: 0;
   top: 0;
   height: 32px;
-  padding: 0 12px;
-  background: var(--bg-neutral-subtle);
-  border: 1px solid var(--border-base);
-  border-left: none;
-  border-radius: 0 2px 2px 0;
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  font-size: 0.875rem;
-  font-family: var(--font-sans);
-  color: var(--color-base);
-}
-
-.vector-search-box button:hover {
-  background: var(--bg-interactive);
 }
 
 .search-suggestions {
@@ -240,8 +241,33 @@ a:visited {
   right: 0;
   background: var(--bg-base);
   border: 1px solid var(--border-subtle);
+  border-radius: 0 0 12px 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   z-index: 100;
+  overflow: hidden;
+}
+
+.search-suggestions-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  color: var(--color-subtle);
+  border-top: 1px solid var(--border-muted);
+  cursor: pointer;
+}
+
+.search-suggestions-footer:hover {
+  background: #eaf3ff;
+  color: var(--color-progressive);
+}
+
+.search-suggestions-footer svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.6;
 }
 
 .search-suggestions a {
@@ -549,6 +575,20 @@ a:focus-visible, button:focus-visible {
   accent-color: var(--color-progressive);
 }
 
+.appearance-group + .appearance-group {
+  margin-top: 8px;
+}
+
+/* Font size options */
+body.font-small { font-size: 87.5%; }
+body.font-standard { font-size: 100%; }
+body.font-large { font-size: 112.5%; }
+
+/* Width options */
+body.width-standard .mw-body-content { max-width: var(--content-max-width); }
+body.width-wide .mw-body-content { max-width: 75rem; }
+body.width-full .mw-body-content { max-width: 100%; }
+
 /* --- Inline TOC Wrapper (hidden on desktop, shown on mobile) --- */
 .inline-toc-wrapper {
   display: none;
@@ -631,7 +671,7 @@ a:focus-visible, button:focus-visible {
 
 .vector-tab a {
   display: block;
-  padding: 12px 0 7px 0;
+  padding: 8px 0 6px 0;
   border-bottom: 2px solid transparent;
   color: var(--color-progressive);
   white-space: nowrap;
@@ -644,7 +684,7 @@ a:focus-visible, button:focus-visible {
 
 .vector-tab.selected a {
   color: var(--color-base);
-  border-bottom: 2px solid var(--color-base);
+  border-bottom: 2px solid var(--color-progressive);
 }
 
 /* --- Body Content --- */
@@ -915,8 +955,9 @@ figure.thumb-left {
 
 /* --- Categories Bar --- */
 .mw-categories {
-  border-top: 1px solid var(--border-muted);
-  padding-top: 0.5em;
+  border: 1px solid var(--border-muted);
+  background: var(--bg-neutral-subtle);
+  padding: 0.5em 0.8em;
   margin-top: 2em;
   font-size: 0.8rem;
   clear: both;
@@ -1794,6 +1835,40 @@ figure.thumb-left {
   text-decoration: none !important;
 }
 
+.sticky-article-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+  color: var(--color-base);
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.sticky-tabs {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+}
+
+.sticky-tabs a {
+  color: var(--color-subtle);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sticky-tabs a:hover {
+  color: var(--color-progressive);
+}
+
+.sticky-tabs a:visited {
+  color: var(--color-subtle);
+}
+
 .sticky-header-inner .vector-search-box {
   margin: 0;
 }
@@ -1806,6 +1881,12 @@ figure.thumb-left {
   .sticky-header-inner {
     padding: 6px 12px;
     gap: 8px;
+  }
+  .sticky-article-title {
+    display: none;
+  }
+  .sticky-tabs {
+    display: none;
   }
 }
 

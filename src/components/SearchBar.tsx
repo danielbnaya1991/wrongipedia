@@ -78,15 +78,14 @@ export default function SearchBar() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+            onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); else if (query.length >= 2) setShowSuggestions(true); }}
             placeholder="Search Wrongipedia"
-            style={{ paddingRight: '80px' }}
           />
-          <button type="submit">Search</button>
+          <button type="submit" tabIndex={-1}>Search</button>
         </div>
       </form>
 
-      {showSuggestions && suggestions.length > 0 && (
+      {showSuggestions && (
         <div className="search-suggestions" role="listbox" aria-label="Search suggestions">
           {suggestions.map((s) => (
             <Link
@@ -105,6 +104,15 @@ export default function SearchBar() {
               <span>{s.title}</span>
             </Link>
           ))}
+          {query.trim().length > 0 && (
+            <div
+              className="search-suggestions-footer"
+              onClick={() => { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setShowSuggestions(false); }}
+            >
+              <svg viewBox="0 0 20 20"><path d="M12.2 13.6a7 7 0 111.4-1.4l4.6 4.6-1.4 1.4-4.6-4.6zM8 13A5 5 0 108 3a5 5 0 000 10z" fill="currentColor" /></svg>
+              <span>Search for pages containing <b>{query.trim()}</b></span>
+            </div>
+          )}
         </div>
       )}
     </div>

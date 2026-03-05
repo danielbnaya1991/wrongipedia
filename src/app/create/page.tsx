@@ -16,14 +16,14 @@ function CreateArticleForm() {
   const [summary, setSummary] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     async function checkAuth() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      setIsLoggedIn(!!user);
+      setIsAnonymous(!user);
     }
     checkAuth();
   }, []);
@@ -39,12 +39,6 @@ function CreateArticleForm() {
 
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      router.push("/auth/login?redirect=/create");
-      return;
-    }
-
     const slug = slugify(title);
 
     // Check if slug already exists
@@ -67,7 +61,7 @@ function CreateArticleForm() {
         slug,
         content,
         summary,
-        created_by: user.id,
+        created_by: user?.id || null,
       })
       .select()
       .single();
@@ -84,7 +78,7 @@ function CreateArticleForm() {
         article_id: article.id,
         content,
         summary,
-        edited_by: user.id,
+        edited_by: user?.id || null,
         edit_comment: "Article created",
       });
     } catch {}
@@ -96,10 +90,11 @@ function CreateArticleForm() {
     <div className="wiki-container">
       <h1 className="text-2xl wiki-heading mb-4">Create a new article</h1>
 
-      {isLoggedIn === false && (
-        <div className="wiki-notice wiki-notice-warning mb-4">
-          You must be <Link href="/auth/login?redirect=/create"><b>logged in</b></Link> to create articles.{' '}
-          Don&apos;t have an account? <Link href="/auth/signup">Create one</Link>.
+      {isAnonymous && (
+        <div className="wiki-notice wiki-notice-warning mb-4" style={{ fontSize: '0.875rem' }}>
+          <strong>You are not logged in.</strong> Your IP address will be publicly visible if you create an article.{' '}
+          <a href="/auth/login?redirect=/create" style={{ color: 'var(--color-progressive)' }}>Log in</a> or{' '}
+          <a href="/auth/signup" style={{ color: 'var(--color-progressive)' }}>create an account</a> to have your contributions attributed to your username.
         </div>
       )}
 
@@ -123,7 +118,6 @@ function CreateArticleForm() {
           onChange={(e) => setTitle(e.target.value)}
           className="wiki-input w-full text-lg"
           placeholder="e.g. Quantum Sandwich Theory"
-          disabled={isLoggedIn === false}
         />
         {title && (
           <p className="text-xs text-gray-500 mt-1" style={{ fontFamily: 'sans-serif' }}>
@@ -142,7 +136,6 @@ function CreateArticleForm() {
           onChange={(e) => setSummary(e.target.value)}
           className="wiki-input w-full"
           placeholder="Brief description of the article"
-          disabled={isLoggedIn === false}
         />
       </div>
 
@@ -156,7 +149,7 @@ function CreateArticleForm() {
       <div className="flex gap-3">
         <button
           onClick={handleCreate}
-          disabled={saving || isLoggedIn === false}
+          disabled={saving}
           className="wiki-btn wiki-btn-primary"
         >
           {saving ? "Creating..." : "Create article"}

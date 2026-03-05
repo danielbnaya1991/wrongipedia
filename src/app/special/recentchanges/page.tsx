@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { seedArticles } from "@/lib/seed-data";
+import { createClient } from "@/lib/supabase/server";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
   description: "Track the latest edits to Wrongipedia articles",
 };
 
-// Fake editor names
+// Fake editor names (used for backfill)
 const editors = [
   "WrongBot",
   "FactMangler42",
@@ -74,26 +75,61 @@ interface RecentChange {
   articleTitle: string;
   articleSlug: string;
   editor: string;
+  editorLink: string | null;
   summary: string;
   bytesChanged: number;
   isNew: boolean;
   isMinor: boolean;
   isBotEdit: boolean;
+  isReal: boolean;
 }
 
-function generateRecentChanges(): RecentChange[] {
+async function getRealChanges(): Promise<RecentChange[]> {
+  try {
+    const supabase = await createClient();
+    const { data: revisions } = await supabase
+      .from("article_revisions")
+      .select("*, articles(title, slug), profiles(username)")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (!revisions || revisions.length === 0) return [];
+
+    return revisions.map((rev: any) => {
+      const editorName = rev.profiles?.username || (rev.editor_ip ? `${rev.editor_ip}` : "Anonymous");
+      const editorLink = rev.profiles?.username ? `/user/${rev.profiles.username}` : null;
+
+      return {
+        timestamp: new Date(rev.created_at),
+        articleTitle: rev.articles?.title || "Unknown",
+        articleSlug: rev.articles?.slug || "",
+        editor: editorName,
+        editorLink,
+        summary: rev.edit_comment || "",
+        bytesChanged: rev.content ? rev.content.length - (rev.summary?.length || 0) : 0,
+        isNew: rev.edit_comment === "Article created" || rev.edit_comment === "Seed article promoted to database",
+        isMinor: rev.is_minor || false,
+        isBotEdit: false,
+        isReal: true,
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
+function generateFakeChanges(): RecentChange[] {
   const changes: RecentChange[] = [];
   const now = new Date();
   const random = seededRandom(42);
 
-  // Generate changes spanning the last 3 days
   for (let i = 0; i < 80; i++) {
     const article = seedArticles[Math.floor(random() * seedArticles.length)];
-    const minutesAgo = Math.floor(random() * 4320); // up to 3 days
+    const minutesAgo = Math.floor(random() * 4320);
     const timestamp = new Date(now.getTime() - minutesAgo * 60 * 1000);
     const editor = editors[Math.floor(random() * editors.length)];
     const summary = editSummaries[Math.floor(random() * editSummaries.length)];
-    const bytesChanged = Math.floor(random() * 4000) - 1200; // -1200 to +2800
+    const bytesChanged = Math.floor(random() * 4000) - 1200;
     const isMinor = random() < 0.3;
     const isBotEdit = editor === "WrongBot" || editor === "BlunderBot3000";
     const isNew = random() < 0.05;
@@ -103,15 +139,16 @@ function generateRecentChanges(): RecentChange[] {
       articleTitle: article.title,
       articleSlug: article.slug,
       editor,
+      editorLink: `/user/${editor}`,
       summary,
       bytesChanged,
       isNew,
       isMinor,
       isBotEdit,
+      isReal: false,
     });
   }
 
-  // Sort by timestamp descending
   changes.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   return changes;
 }
@@ -131,18 +168,18 @@ function formatDateHeading(date: Date): string {
   });
 }
 
-function formatBytesChanged(bytes: number): React.ReactElement {
+function formatBytesChanged(bytes: number) {
   const abs = Math.abs(bytes);
   const sign = bytes >= 0 ? "+" : "\u2212";
   const isBold = abs > 500;
 
   let color: string;
   if (bytes > 0) {
-    color = "#006400"; // green
+    color = "#006400";
   } else if (bytes < 0) {
-    color = "#8b0000"; // red
+    color = "#8b0000";
   } else {
-    color = "#54595d"; // gray
+    color = "#54595d";
   }
 
   return (
@@ -158,8 +195,17 @@ function formatBytesChanged(bytes: number): React.ReactElement {
   );
 }
 
-export default function RecentChangesPage() {
-  const changes = generateRecentChanges();
+export default async function RecentChangesPage() {
+  // Fetch real changes from DB first, backfill with fake data
+  const realChanges = await getRealChanges();
+  const fakeChanges = generateFakeChanges();
+
+  // Merge: real changes first, then fake changes to fill
+  const allChanges = [...realChanges, ...fakeChanges];
+  allChanges.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+
+  // Deduplicate by limiting to reasonable count
+  const changes = allChanges.slice(0, 100);
 
   // Group changes by date
   const grouped: { date: string; changes: RecentChange[] }[] = [];
@@ -368,24 +414,30 @@ export default function RecentChangesPage() {
 
                 {/* Editor */}
                 <span style={{ marginRight: "0.5em" }}>
-                  <Link
-                    href={`/user/${change.editor}`}
-                    style={{ color: "var(--color-progressive)" }}
-                  >
-                    {change.editor}
-                  </Link>
+                  {change.editorLink ? (
+                    <Link
+                      href={change.editorLink}
+                      style={{ color: "var(--color-progressive)" }}
+                    >
+                      {change.editor}
+                    </Link>
+                  ) : (
+                    <span style={{ color: "var(--color-subtle)" }}>{change.editor}</span>
+                  )}
                 </span>
 
                 {/* Edit summary */}
-                <span
-                  style={{
-                    color: "var(--color-subtle)",
-                    fontStyle: "italic",
-                    fontSize: "0.95em",
-                  }}
-                >
-                  ({change.summary})
-                </span>
+                {change.summary && (
+                  <span
+                    style={{
+                      color: "var(--color-subtle)",
+                      fontStyle: "italic",
+                      fontSize: "0.95em",
+                    }}
+                  >
+                    ({change.summary})
+                  </span>
+                )}
               </li>
             ))}
           </ul>
@@ -402,7 +454,7 @@ export default function RecentChangesPage() {
           color: "var(--color-subtle)",
         }}
       >
-        Showing {changes.length} changes in the last 3 days | {seedArticles.length} articles monitored
+        Showing {changes.length} changes ({realChanges.length} real edits) | {seedArticles.length} articles monitored
       </div>
     </div>
   );

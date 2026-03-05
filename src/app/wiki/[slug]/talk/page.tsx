@@ -99,36 +99,44 @@ export default function TalkPage() {
 
   function renderMessage(msg: TalkMessage, depth = 0) {
     return (
-      <div key={msg.id} style={{ marginLeft: `${depth * 2}em` }} className="mb-3">
-        <div className="border-l-2 border-[var(--wiki-border)] pl-3">
-          <div className="text-sm text-gray-500 mb-1" style={{ fontFamily: 'sans-serif' }}>
+      <div key={msg.id} style={{ marginLeft: `${depth * 2}em`, marginBottom: '0.75em' }}>
+        <div style={{ borderLeft: '2px solid var(--border-muted)', paddingLeft: '0.75em' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--color-subtle)', marginBottom: '0.25em', fontFamily: 'var(--font-sans)' }}>
             {msg.profiles && (
-              <Link href={`/user/${msg.profiles.username}`} className="wiki-link font-medium">
+              <Link href={`/user/${msg.profiles.username}`} style={{ color: 'var(--color-progressive)', fontWeight: 500 }}>
                 {msg.profiles.username}
               </Link>
             )}
             {" — "}
             {formatDate(msg.created_at)}
           </div>
-          <div className="mb-1">{msg.content}</div>
+          <div style={{ fontSize: '0.875rem', marginBottom: '0.25em' }}>{msg.content}</div>
           {userId && (
             <button
               onClick={() => setReplyTo(replyTo === msg.id ? null : msg.id)}
-              className="text-xs wiki-link bg-transparent border-none cursor-pointer"
-              style={{ fontFamily: 'sans-serif' }}
+              style={{
+                fontSize: '0.75rem',
+                color: 'var(--color-progressive)',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                fontFamily: 'var(--font-sans)',
+              }}
             >
               {replyTo === msg.id ? "Cancel reply" : "Reply"}
             </button>
           )}
 
           {replyTo === msg.id && (
-            <div className="mt-2 flex gap-2">
+            <div style={{ marginTop: '0.5em', display: 'flex', gap: '0.5em' }}>
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                className="wiki-input flex-1"
+                className="wiki-input"
                 placeholder="Write a reply..."
+                style={{ flex: 1 }}
                 onKeyDown={(e) => e.key === "Enter" && handlePost()}
               />
               <button onClick={handlePost} disabled={posting} className="wiki-btn wiki-btn-primary">
@@ -146,22 +154,28 @@ export default function TalkPage() {
   if (loading) {
     return (
       <div>
+        <div className="mw-body-header">
+          <h1 className="mw-first-heading">Talk: {articleTitle || slug}</h1>
+          <div className="mw-page-subtitle">From Wrongipedia, the wrong encyclopedia</div>
+        </div>
         <ArticleTabs slug={slug} />
-        <div className="wiki-container">Loading...</div>
+        <div className="mw-body-content" style={{ marginTop: '1em' }}>Loading...</div>
       </div>
     );
   }
 
   return (
     <div>
-      <ArticleTabs slug={slug} />
-      <div className="wiki-container">
-        <h1 className="text-2xl wiki-heading mb-4">
-          Talk: {articleTitle}
-        </h1>
+      <div className="mw-body-header">
+        <h1 className="mw-first-heading">Talk: {articleTitle}</h1>
+        <div className="mw-page-subtitle">From Wrongipedia, the wrong encyclopedia</div>
+      </div>
 
+      <ArticleTabs slug={slug} />
+
+      <div className="mw-body-content" style={{ marginTop: '1em' }}>
         {messages.length === 0 ? (
-          <div className="wiki-notice wiki-notice-info" style={{ marginBottom: '1em' }}>
+          <div className="mw-notice mw-notice-info" style={{ marginBottom: '1em' }}>
             {!articleId ? (
               <>
                 This is a seed article. Discussion will be available when the community grows.
@@ -175,21 +189,22 @@ export default function TalkPage() {
             )}
           </div>
         ) : (
-          <div className="mb-6">
+          <div style={{ marginBottom: '1.5em' }}>
             {messages.map((msg) => renderMessage(msg))}
           </div>
         )}
 
         {userId && !replyTo && (
-          <div className="border-t border-[var(--wiki-border)] pt-4">
-            <h3 className="text-lg font-medium mb-2" style={{ fontFamily: 'sans-serif' }}>
+          <div style={{ borderTop: '1px solid var(--border-muted)', paddingTop: '1em' }}>
+            <h3 style={{ fontSize: '1.1em', fontWeight: 500, marginBottom: '0.5em', fontFamily: 'var(--font-sans)' }}>
               New topic
             </h3>
             <textarea
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="wiki-input w-full h-24 mb-2"
+              className="wiki-input"
               placeholder="Start a new discussion topic..."
+              style={{ width: '100%', height: '6em', marginBottom: '0.5em', resize: 'vertical' }}
             />
             <button onClick={handlePost} disabled={posting} className="wiki-btn wiki-btn-primary">
               {posting ? "Posting..." : "Post message"}
@@ -198,8 +213,8 @@ export default function TalkPage() {
         )}
 
         {!userId && (
-          <div className="wiki-notice wiki-notice-info">
-            <Link href={`/auth/login?redirect=/wiki/${slug}/talk`} className="wiki-link">
+          <div className="mw-notice mw-notice-info">
+            <Link href={`/auth/login?redirect=/wiki/${slug}/talk`} style={{ color: 'var(--color-progressive)' }}>
               Log in
             </Link>
             {" "}to participate in the discussion.

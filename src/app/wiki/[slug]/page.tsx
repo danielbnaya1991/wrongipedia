@@ -223,9 +223,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   let html = addHeadingIds(article.content || "");
   html = processWikiLinks(html, knownSlugs);
-  if (!isSeed) {
-    html = addEditSectionLinks(html, slug);
-  }
+  html = addEditSectionLinks(html, slug);
   html = sanitizeHtml(html, {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption", "span", "details", "summary"]),
     allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, "*": ["id", "class", "style", "title"], img: ["src", "alt", "width", "height"], a: ["href", "class", "title"] },
@@ -254,7 +252,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       </div>
 
       {/* Tabs */}
-      <ArticleTabs slug={slug} editable={!isSeed} />
+      <ArticleTabs slug={slug} editable={true} />
 
       {/* Body content */}
       <div className="mw-body-content">
@@ -298,7 +296,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <div className="ambox-image">&#128221;</div>
               <div className="ambox-text">
                 This article about wrong information is a <b>stub</b>. You can help Wrongipedia by{' '}
-                <Link href={isSeed ? "/create" : `/wiki/${slug}/edit`}>expanding it with more wrong facts</Link>.
+                <Link href={`/wiki/${slug}/edit`}>expanding it with more wrong facts</Link>.
               </div>
             </div>
           </div>

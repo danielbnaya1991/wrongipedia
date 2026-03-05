@@ -13,11 +13,13 @@ export interface Article {
   content: string;
   summary: string;
   featured_image: string;
-  created_by: string;
+  created_by: string | null;
   created_at: string;
   updated_at: string;
   is_featured: boolean;
   view_count: number;
+  promoted_from_seed?: boolean;
+  protection_level?: 'none' | 'semi' | 'full';
   profiles?: Profile;
   categories?: Category[];
 }
@@ -27,8 +29,10 @@ export interface ArticleRevision {
   article_id: string;
   content: string;
   summary: string;
-  edited_by: string;
+  edited_by: string | null;
+  editor_ip?: string;
   edit_comment: string;
+  is_minor?: boolean;
   created_at: string;
   profiles?: Profile;
 }

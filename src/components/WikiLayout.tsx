@@ -54,11 +54,16 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   const [otherProjectsVisible, setOtherProjectsVisible] = useState(true);
   const [appearanceVisible, setAppearanceVisible] = useState(true);
   const [colorMode, setColorMode] = useState<'auto' | 'light' | 'dark'>('auto');
+  const [fontSize, setFontSize] = useState<'small' | 'standard' | 'large'>('standard');
+  const [contentWidth, setContentWidth] = useState<'standard' | 'wide' | 'full'>('standard');
   const [tocItems, setTocItems] = useState<{ id: string; text: string; level: number }[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [stickyHeaderVisible, setStickyHeaderVisible] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
   const [citeModalOpen, setCiteModalOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [watchedArticle, setWatchedArticle] = useState(false);
+  const [currentArticleId, setCurrentArticleId] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
@@ -84,6 +89,46 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
     }
     getUser();
   }, []);
+
+  // Fetch notification count for logged-in users
+  useEffect(() => {
+    if (!user) return;
+    async function fetchNotifications() {
+      try {
+        const res = await fetch("/api/notifications");
+        const data = await res.json();
+        setNotificationCount(data.unreadCount || 0);
+      } catch {}
+    }
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user]);
+
+  // Check watchlist status for current article
+  useEffect(() => {
+    if (!isArticlePage || !currentSlug || !user) {
+      setWatchedArticle(false);
+      setCurrentArticleId(null);
+      return;
+    }
+    async function checkWatch() {
+      try {
+        const { data: article } = await supabase
+          .from("articles")
+          .select("id")
+          .eq("slug", currentSlug)
+          .single();
+        if (article) {
+          setCurrentArticleId(article.id);
+          const res = await fetch(`/api/watchlist?articleId=${article.id}`);
+          const data = await res.json();
+          setWatchedArticle(data.watched);
+        }
+      } catch {}
+    }
+    checkWatch();
+  }, [isArticlePage, currentSlug, user]);
 
   // Extract article title from rendered DOM
   useEffect(() => {
@@ -181,6 +226,18 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
     }
   }, [colorMode]);
 
+  // Font size toggle
+  useEffect(() => {
+    document.body.classList.remove('font-small', 'font-standard', 'font-large');
+    document.body.classList.add(`font-${fontSize}`);
+  }, [fontSize]);
+
+  // Content width toggle
+  useEffect(() => {
+    document.body.classList.remove('width-standard', 'width-wide', 'width-full');
+    document.body.classList.add(`width-${contentWidth}`);
+  }, [contentWidth]);
+
   async function handleLogout() {
     await supabase.auth.signOut();
     setUser(null);
@@ -219,6 +276,25 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   const handlePrintPDF = useCallback(() => {
     window.print();
   }, []);
+
+  const handleToggleWatch = useCallback(async () => {
+    if (!currentArticleId || !user) {
+      showToast("Log in to use your watchlist");
+      return;
+    }
+    try {
+      const res = await fetch("/api/watchlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ articleId: currentArticleId }),
+      });
+      const data = await res.json();
+      setWatchedArticle(data.watched);
+      showToast(data.watched ? "Added to your watchlist" : "Removed from your watchlist");
+    } catch {
+      showToast("Could not update watchlist");
+    }
+  }, [currentArticleId, user]);
 
   const handlePrintableVersion = useCallback(() => {
     document.documentElement.classList.add("printable-mode");
@@ -290,14 +366,33 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
               <Link href={`/user/${user.username}`}>{user.username}</Link>
             ) : (
               <>
-                <Link href="/auth/login">Log in</Link>
                 <Link href="/auth/signup">Create account</Link>
+                <Link href="/auth/login">Log in</Link>
               </>
             )}
           </div>
           <div className="vector-user-icons">
             {user ? (
               <>
+                {/* Notifications */}
+                <Link href="/special/notifications" className="vector-user-icon" title="Notifications" style={{ position: 'relative' }}>
+                  <svg viewBox="0 0 20 20"><path d="M16 7a5.38 5.38 0 00-4.46-4.85C11.6 1.46 11.53 0 10 0S8.4 1.46 8.46 2.15A5.38 5.38 0 004 7c0 6-2 7-2 7h16s-2-1-2-7zm-4.5 11a2.5 2.5 0 01-3 0 2 2 0 001.5.5 2 2 0 001.5-.5z" fill="currentColor"/></svg>
+                  {notificationCount > 0 && (
+                    <span style={{
+                      position: 'absolute', top: '-4px', right: '-4px',
+                      background: '#d33', color: '#fff', borderRadius: '50%',
+                      width: '14px', height: '14px', fontSize: '9px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: 'sans-serif', fontWeight: 'bold',
+                    }}>
+                      {notificationCount > 9 ? '9+' : notificationCount}
+                    </span>
+                  )}
+                </Link>
+                {/* Watchlist */}
+                <Link href="/special/watchlist" className="vector-user-icon" title="Watchlist">
+                  <svg viewBox="0 0 20 20"><path d="M10 1l2.39 6.34H19l-5.3 3.82L15.69 18 10 13.47 4.31 18l2-6.84L1 7.34h6.61z" fill="currentColor"/></svg>
+                </Link>
                 {/* User page */}
                 <Link href={`/user/${user.username}`} className="vector-user-icon" title="User page">
                   <svg viewBox="0 0 20 20"><path d="M10 11c-5.92 0-8 3-8 5v1h16v-1c0-2-2.08-5-8-5" fill="currentColor"/><circle cx="10" cy="5.5" r="4.5" fill="currentColor"/></svg>
@@ -344,6 +439,16 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
               <text x="20" y="42" fontSize="5" fill="#ccc" fontFamily="serif">G</text>
             </svg>
           </Link>
+          {isArticlePage && articleTitle && (
+            <span className="sticky-article-title">{articleTitle}</span>
+          )}
+          {isArticlePage && currentSlug && (
+            <div className="sticky-tabs">
+              <Link href={`/wiki/${currentSlug}/talk`}>Talk</Link>
+              <Link href={`/wiki/${currentSlug}/edit`}>Edit</Link>
+              <Link href={`/wiki/${currentSlug}/history`}>History</Link>
+            </div>
+          )}
           <SearchBar />
           <div className="sticky-user-links">
             {user ? (
@@ -443,6 +548,19 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
                     <ul className="vector-menu-content-list">
                       <li><Link href="/create">Create article</Link></li>
                       <li><Link href="/generate">AI Generator</Link></li>
+                      {user && <li><Link href="/special/watchlist">Watchlist</Link></li>}
+                      {user && <li><Link href="/special/preferences">Preferences</Link></li>}
+                    </ul>
+                  </div>
+                </div>
+                <div className="vector-menu-portal">
+                  <div className="vector-menu-heading">Wrongipedia</div>
+                  <div className="vector-menu-content">
+                    <ul className="vector-menu-content-list">
+                      <li><Link href="/wrongipedia/policies">Policies</Link></li>
+                      <li><Link href="/wrongipedia/assume-bad-faith">Assume bad faith</Link></li>
+                      <li><Link href="/special/article-of-the-month">Article of the month</Link></li>
+                      <li><Link href="/special/barnstars">Barnstars</Link></li>
                     </ul>
                   </div>
                 </div>
@@ -469,7 +587,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
         <main className="mw-body" id="main-content">
           {/* Language button in titlebar area (Vector 2022 position) */}
           {isArticlePage && (
-            <div className="mw-language-btn-container">
+            <div className="mw-language-btn-container" style={{ display: 'flex', gap: '0.5em', alignItems: 'center' }}>
               <button
                 className="mw-language-btn"
                 onClick={() => showToast("This article is only available in Wrong English")}
@@ -611,38 +729,56 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
           </div>
           {appearanceVisible && (
             <div className="appearance-section">
-              <div className="appearance-label">Color</div>
-              <div className="appearance-options">
-                <label className={`appearance-option${colorMode === 'auto' ? ' appearance-option-active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="colorMode"
-                    value="auto"
-                    checked={colorMode === 'auto'}
-                    onChange={() => setColorMode('auto')}
-                  />
-                  <span>Automatic</span>
-                </label>
-                <label className={`appearance-option${colorMode === 'light' ? ' appearance-option-active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="colorMode"
-                    value="light"
-                    checked={colorMode === 'light'}
-                    onChange={() => setColorMode('light')}
-                  />
-                  <span>Light</span>
-                </label>
-                <label className={`appearance-option${colorMode === 'dark' ? ' appearance-option-active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="colorMode"
-                    value="dark"
-                    checked={colorMode === 'dark'}
-                    onChange={() => setColorMode('dark')}
-                  />
-                  <span>Dark</span>
-                </label>
+              <div className="appearance-group">
+                <div className="appearance-label">Color</div>
+                <div className="appearance-options">
+                  <label className={`appearance-option${colorMode === 'auto' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="colorMode" value="auto" checked={colorMode === 'auto'} onChange={() => setColorMode('auto')} />
+                    <span>Automatic</span>
+                  </label>
+                  <label className={`appearance-option${colorMode === 'light' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="colorMode" value="light" checked={colorMode === 'light'} onChange={() => setColorMode('light')} />
+                    <span>Light</span>
+                  </label>
+                  <label className={`appearance-option${colorMode === 'dark' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="colorMode" value="dark" checked={colorMode === 'dark'} onChange={() => setColorMode('dark')} />
+                    <span>Dark</span>
+                  </label>
+                </div>
+              </div>
+              <div className="appearance-group">
+                <div className="appearance-label">Font size</div>
+                <div className="appearance-options">
+                  <label className={`appearance-option${fontSize === 'small' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="fontSize" value="small" checked={fontSize === 'small'} onChange={() => setFontSize('small')} />
+                    <span style={{ fontSize: '0.7em' }}>Small</span>
+                  </label>
+                  <label className={`appearance-option${fontSize === 'standard' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="fontSize" value="standard" checked={fontSize === 'standard'} onChange={() => setFontSize('standard')} />
+                    <span>Standard</span>
+                  </label>
+                  <label className={`appearance-option${fontSize === 'large' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="fontSize" value="large" checked={fontSize === 'large'} onChange={() => setFontSize('large')} />
+                    <span style={{ fontSize: '1.1em' }}>Large</span>
+                  </label>
+                </div>
+              </div>
+              <div className="appearance-group">
+                <div className="appearance-label">Width</div>
+                <div className="appearance-options">
+                  <label className={`appearance-option${contentWidth === 'standard' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="contentWidth" value="standard" checked={contentWidth === 'standard'} onChange={() => setContentWidth('standard')} />
+                    <span>Standard</span>
+                  </label>
+                  <label className={`appearance-option${contentWidth === 'wide' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="contentWidth" value="wide" checked={contentWidth === 'wide'} onChange={() => setContentWidth('wide')} />
+                    <span>Wide</span>
+                  </label>
+                  <label className={`appearance-option${contentWidth === 'full' ? ' appearance-option-active' : ''}`}>
+                    <input type="radio" name="contentWidth" value="full" checked={contentWidth === 'full'} onChange={() => setContentWidth('full')} />
+                    <span>Full</span>
+                  </label>
+                </div>
               </div>
             </div>
           )}

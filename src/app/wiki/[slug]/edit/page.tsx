@@ -14,21 +14,20 @@ export default function EditArticlePage() {
   const [content, setContent] = useState("");
   const [summary, setSummary] = useState("");
   const [editComment, setEditComment] = useState("");
+  const [isMinor, setIsMinor] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [articleId, setArticleId] = useState("");
   const [isSeedArticle, setIsSeedArticle] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     async function load() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push(`/auth/login?redirect=/wiki/${slug}/edit`);
-        return;
-      }
+      setIsAnonymous(!user);
 
       try {
         const { data: article } = await supabase
@@ -46,7 +45,7 @@ export default function EditArticlePage() {
         }
       } catch {}
 
-      // Fallback to seed data
+      // Fallback to seed data — seed articles are now editable
       const seedArticle = seedArticles.find((a) => a.slug === slug);
       if (seedArticle) {
         setContent(seedArticle.content || "");
@@ -56,55 +55,39 @@ export default function EditArticlePage() {
       setLoading(false);
     }
     load();
-  }, [slug, router]);
+  }, [slug]);
 
   async function handleSave() {
     setSaving(true);
     setError("");
 
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      setError("You must be logged in to edit");
-      setSaving(false);
-      return;
-    }
-
-    if (isSeedArticle || !articleId) {
-      setError("This is a demo article. Editing requires a connected database. You can create a new article instead.");
-      setSaving(false);
-      return;
-    }
-
-    // Update article first, then save revision
-    const { error: updateError } = await supabase
-      .from("articles")
-      .update({
-        content,
-        summary,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", articleId);
-
-    if (updateError) {
-      setError(updateError.message);
-      setSaving(false);
-      return;
-    }
-
-    // Save revision after successful article update
     try {
-      await supabase.from("article_revisions").insert({
-        article_id: articleId,
-        content,
-        summary,
-        edited_by: user.id,
-        edit_comment: editComment,
+      const response = await fetch("/api/edit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug,
+          content,
+          summary,
+          editComment,
+          isMinor,
+        }),
       });
-    } catch {}
 
-    router.push(`/wiki/${slug}`);
-    router.refresh();
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "Failed to save");
+        setSaving(false);
+        return;
+      }
+
+      router.push(`/wiki/${slug}`);
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message || "Failed to save");
+      setSaving(false);
+    }
   }
 
   if (loading) {
@@ -121,6 +104,14 @@ export default function EditArticlePage() {
       <ArticleTabs slug={slug} />
       <div className="wiki-container">
         <h1 className="text-2xl wiki-heading mb-4">Editing article</h1>
+
+        {isAnonymous && (
+          <div className="wiki-notice wiki-notice-warning mb-4" style={{ fontSize: '0.875rem' }}>
+            <strong>You are not logged in.</strong> Your IP address will be recorded with this edit.{' '}
+            <a href={`/auth/login?redirect=/wiki/${slug}/edit`} style={{ color: 'var(--color-progressive)' }}>Log in</a> or{' '}
+            <a href="/auth/signup" style={{ color: 'var(--color-progressive)' }}>create an account</a> to have your edits attributed to your username.
+          </div>
+        )}
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
@@ -154,6 +145,17 @@ export default function EditArticlePage() {
             className="wiki-input w-full"
             placeholder="What did you change?"
           />
+        </div>
+
+        <div className="mt-3">
+          <label style={{ fontFamily: 'sans-serif', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5em' }}>
+            <input
+              type="checkbox"
+              checked={isMinor}
+              onChange={(e) => setIsMinor(e.target.checked)}
+            />
+            This is a minor edit
+          </label>
         </div>
 
         <div className="mt-4 flex gap-3">

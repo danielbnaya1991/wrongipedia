@@ -2,6 +2,42 @@ import { createClient } from "@/lib/supabase/server";
 import Anthropic from "@anthropic-ai/sdk";
 import sanitizeHtml from "sanitize-html";
 import { NextResponse } from "next/server";
+import { seedCategories } from "@/lib/seed-data";
+
+// Keyword-to-category mapping for auto-assignment
+const categoryKeywords: Record<string, string[]> = {
+  "science": ["atom", "molecule", "physics", "chemistry", "biology", "experiment", "lab", "theory", "quantum", "energy", "force", "cell", "gene", "evolution", "species"],
+  "history": ["ancient", "war", "empire", "century", "civilization", "dynasty", "revolution", "medieval", "colonial", "era", "historical"],
+  "food-and-drink": ["food", "drink", "recipe", "cook", "cuisine", "ingredient", "dish", "meal", "flavor", "taste", "restaurant", "chef", "bake"],
+  "technology": ["computer", "software", "hardware", "digital", "internet", "AI", "robot", "code", "program", "algorithm", "data", "network", "device"],
+  "space": ["planet", "star", "galaxy", "orbit", "astronaut", "nasa", "rocket", "telescope", "cosmic", "solar", "lunar", "asteroid", "comet"],
+  "mathematics": ["number", "equation", "theorem", "formula", "calculus", "algebra", "geometry", "probability", "statistic", "mathematical"],
+  "nature": ["animal", "plant", "forest", "ocean", "river", "mountain", "wildlife", "ecosystem", "habitat", "species", "bird", "fish", "tree"],
+  "arts-and-culture": ["art", "music", "painting", "sculpture", "literature", "poetry", "film", "theater", "dance", "culture", "creative", "gallery", "museum"],
+  "sports": ["game", "team", "player", "score", "championship", "league", "tournament", "athlete", "race", "match", "stadium", "olympic"],
+  "geography": ["country", "continent", "island", "capital", "border", "region", "map", "climate", "population", "terrain", "landscape"],
+  "language": ["word", "grammar", "syntax", "vocabulary", "dialect", "linguistic", "phonetic", "alphabet", "translate", "language"],
+  "medicine": ["health", "disease", "treatment", "doctor", "patient", "hospital", "symptom", "diagnosis", "drug", "therapy", "medical", "organ"],
+  "philosophy": ["ethics", "moral", "logic", "existence", "consciousness", "truth", "knowledge", "reason", "mind", "philosophical"],
+  "politics": ["government", "election", "democracy", "law", "policy", "political", "parliament", "vote", "rights", "constitution"],
+  "economics": ["economy", "market", "trade", "finance", "bank", "money", "investment", "GDP", "inflation", "economic", "price", "cost"],
+};
+
+function detectCategories(topic: string, content: string): string[] {
+  const text = `${topic} ${content}`.toLowerCase();
+  const matches: { slug: string; score: number }[] = [];
+
+  for (const [catSlug, keywords] of Object.entries(categoryKeywords)) {
+    let score = 0;
+    for (const kw of keywords) {
+      if (text.includes(kw.toLowerCase())) score++;
+    }
+    if (score > 0) matches.push({ slug: catSlug, score });
+  }
+
+  matches.sort((a, b) => b.score - a.score);
+  return matches.slice(0, 3).map(m => m.slug);
+}
 
 export async function POST(request: Request) {
   const { topic } = await request.json();
@@ -65,9 +101,13 @@ Return ONLY the HTML content (starting with a <p> tag for the intro, no <h1>). N
       allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, "*": ["id", "class", "style"], img: ["src", "alt", "width", "height"], a: ["href", "class", "title"] },
     });
 
+    // Auto-assign categories after generation
+    const detectedSlugs = detectCategories(topic, content);
+
     return NextResponse.json({
       content,
       topic,
+      detectedCategories: detectedSlugs,
     });
   } catch (error: any) {
     console.error("Claude API error:", error);
