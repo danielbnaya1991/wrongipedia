@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import Anthropic from "@anthropic-ai/sdk";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -60,7 +60,10 @@ Return ONLY the HTML content (starting with a <p> tag for the intro, no <h1>). N
     });
 
     const rawContent = message.content[0].type === "text" ? message.content[0].text : "";
-    const content = DOMPurify.sanitize(rawContent);
+    const content = sanitizeHtml(rawContent, {
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption", "span"]),
+      allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, "*": ["id", "class", "style"], img: ["src", "alt", "width", "height"], a: ["href", "class", "title"] },
+    });
 
     return NextResponse.json({
       content,

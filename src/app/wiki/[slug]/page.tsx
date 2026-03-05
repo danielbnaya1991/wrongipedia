@@ -4,7 +4,7 @@ import ArticleTabs from "@/components/ArticleTabs";
 import ArticleTOC from "@/components/ArticleTOC";
 import Navbox from "@/components/Navbox";
 import Link from "next/link";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 import type { Metadata } from "next";
 import { seedArticles, seedArticleCategories, seedCategories } from "@/lib/seed-data";
 
@@ -226,7 +226,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!isSeed) {
     html = addEditSectionLinks(html, slug);
   }
-  html = DOMPurify.sanitize(html);
+  html = sanitizeHtml(html, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption", "span", "details", "summary"]),
+    allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, "*": ["id", "class", "style", "title"], img: ["src", "alt", "width", "height"], a: ["href", "class", "title"] },
+    allowedSchemes: ["http", "https"],
+  });
   const toc = generateTOC(html);
 
   // Disambiguation hatnote for common-word articles

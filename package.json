@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/fix-symlinks.js",
     "start": "next start",
     "lint": "eslint"
   },
@@ -24,10 +24,10 @@
     "@tiptap/react": "^3.20.0",
     "@tiptap/starter-kit": "^3.20.0",
     "diff": "^8.0.3",
-    "isomorphic-dompurify": "^3.0.0",
     "next": "16.1.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "sanitize-html": "^2.17.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.8",
@@ -36,6 +36,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
