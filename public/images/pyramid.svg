@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Pyramid -->
+  <polygon points="140,30 185,120 95,120" fill="#e8d5a3" stroke="#c9a96e" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Pyramid shadow side -->
+  <polygon points="140,30 185,120 140,120" fill="#d4bc82" stroke="#c9a96e" stroke-width="1"/>
+  <!-- Brick lines -->
+  <line x1="118" y1="75" x2="162" y2="75" stroke="#c9a96e" stroke-width="0.8" opacity="0.6"/>
+  <line x1="110" y1="90" x2="170" y2="90" stroke="#c9a96e" stroke-width="0.8" opacity="0.6"/>
+  <line x1="103" y1="105" x2="177" y2="105" stroke="#c9a96e" stroke-width="0.8" opacity="0.6"/>
+  <!-- Ground line -->
+  <line x1="70" y1="120" x2="210" y2="120" stroke="#c9a96e" stroke-width="1.5"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Great Pyramid of Giza</text>
+</svg>

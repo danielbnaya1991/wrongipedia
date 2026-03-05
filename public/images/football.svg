@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Football/soccer ball -->
+  <circle cx="140" cy="78" r="35" fill="white" stroke="#333" stroke-width="2"/>
+  <!-- Pentagon patches -->
+  <polygon points="140,53 150,60 147,72 133,72 130,60" fill="#333" stroke="#333" stroke-width="1"/>
+  <!-- Top hexagon edges -->
+  <line x1="140" y1="53" x2="140" y2="43" stroke="#333" stroke-width="1.2"/>
+  <line x1="150" y1="60" x2="160" y2="52" stroke="#333" stroke-width="1.2"/>
+  <line x1="130" y1="60" x2="120" y2="52" stroke="#333" stroke-width="1.2"/>
+  <line x1="147" y1="72" x2="157" y2="78" stroke="#333" stroke-width="1.2"/>
+  <line x1="133" y1="72" x2="123" y2="78" stroke="#333" stroke-width="1.2"/>
+  <!-- Lower pentagon -->
+  <polygon points="140,103 150,96 147,84 133,84 130,96" fill="#333" stroke="#333" stroke-width="1"/>
+  <line x1="140" y1="103" x2="140" y2="113" stroke="#333" stroke-width="1.2"/>
+  <line x1="150" y1="96" x2="160" y2="100" stroke="#333" stroke-width="1.2"/>
+  <line x1="130" y1="96" x2="120" y2="100" stroke="#333" stroke-width="1.2"/>
+  <!-- Side pentagons (simplified) -->
+  <polygon points="108,68 112,58 120,52 123,60 118,70" fill="#333" stroke="#333" stroke-width="1"/>
+  <polygon points="172,68 168,58 160,52 157,60 162,70" fill="#333" stroke="#333" stroke-width="1"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Association Football</text>
+</svg>

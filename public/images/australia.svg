@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Kangaroo -->
+  <!-- Body -->
+  <ellipse cx="148" cy="82" rx="25" ry="18" fill="#a1887f" stroke="#795548" stroke-width="1.5" transform="rotate(-10,148,82)"/>
+  <!-- Head -->
+  <ellipse cx="118" cy="52" rx="12" ry="10" fill="#a1887f" stroke="#795548" stroke-width="1.5" transform="rotate(-5,118,52)"/>
+  <!-- Ears -->
+  <ellipse cx="112" cy="36" rx="4" ry="10" fill="#a1887f" stroke="#795548" stroke-width="1.5" transform="rotate(-10,112,36)"/>
+  <ellipse cx="126" cy="36" rx="4" ry="10" fill="#a1887f" stroke="#795548" stroke-width="1.5" transform="rotate(5,126,36)"/>
+  <!-- Inner ears -->
+  <ellipse cx="112" cy="37" rx="2" ry="6" fill="#d7ccc8" transform="rotate(-10,112,37)"/>
+  <ellipse cx="126" cy="37" rx="2" ry="6" fill="#d7ccc8" transform="rotate(5,126,37)"/>
+  <!-- Eye -->
+  <circle cx="114" cy="50" r="2.5" fill="#3e2723"/>
+  <circle cx="115" cy="49" r="0.8" fill="white"/>
+  <!-- Nose -->
+  <ellipse cx="107" cy="53" rx="3" ry="2" fill="#5d4037"/>
+  <!-- Neck -->
+  <path d="M125,58 C130,65 135,70 138,72" fill="none" stroke="#795548" stroke-width="8"/>
+  <path d="M125,58 C130,65 135,70 138,72" fill="none" stroke="#a1887f" stroke-width="5"/>
+  <!-- Arms (small) -->
+  <path d="M130,72 C125,78 122,82 120,85" fill="none" stroke="#a1887f" stroke-width="5" stroke-linecap="round"/>
+  <path d="M130,72 C125,78 122,82 120,85" fill="none" stroke="#795548" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Hind legs -->
+  <path d="M155,92 C155,100 148,110 145,115 C142,118 135,120 130,118" fill="none" stroke="#a1887f" stroke-width="8" stroke-linecap="round"/>
+  <path d="M155,92 C155,100 148,110 145,115 C142,118 135,120 130,118" fill="none" stroke="#795548" stroke-width="1.5"/>
+  <!-- Foot -->
+  <ellipse cx="127" cy="118" rx="12" ry="4" fill="#a1887f" stroke="#795548" stroke-width="1.5"/>
+  <!-- Tail -->
+  <path d="M170,85 C180,90 190,95 195,105 C198,112 195,118 190,120" fill="none" stroke="#a1887f" stroke-width="7" stroke-linecap="round"/>
+  <path d="M170,85 C180,90 190,95 195,105 C198,112 195,118 190,120" fill="none" stroke="#795548" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Ground -->
+  <line x1="80" y1="122" x2="210" y2="122" stroke="#bdbdbd" stroke-width="1"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Australia</text>
+</svg>

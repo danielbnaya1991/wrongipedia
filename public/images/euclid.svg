@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Ruler -->
+  <rect x="90" y="85" width="100" height="16" rx="1" fill="#f5e6cc" stroke="#8d6e63" stroke-width="1.5"/>
+  <!-- Ruler tick marks -->
+  <line x1="105" y1="85" x2="105" y2="92" stroke="#8d6e63" stroke-width="0.8"/>
+  <line x1="120" y1="85" x2="120" y2="95" stroke="#8d6e63" stroke-width="1"/>
+  <line x1="135" y1="85" x2="135" y2="92" stroke="#8d6e63" stroke-width="0.8"/>
+  <line x1="150" y1="85" x2="150" y2="95" stroke="#8d6e63" stroke-width="1"/>
+  <line x1="165" y1="85" x2="165" y2="92" stroke="#8d6e63" stroke-width="0.8"/>
+  <line x1="175" y1="85" x2="175" y2="95" stroke="#8d6e63" stroke-width="1"/>
+  <!-- Compass/set square -->
+  <polygon points="140,30 115,105 165,105" fill="none" stroke="#546e7a" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Angle arc -->
+  <path d="M127,90 A15,15 0 0,1 153,90" fill="none" stroke="#546e7a" stroke-width="1.2"/>
+  <!-- Small circle at top -->
+  <circle cx="140" cy="30" r="3" fill="none" stroke="#546e7a" stroke-width="1.5"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Euclidean Geometry</text>
+</svg>

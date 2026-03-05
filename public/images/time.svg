@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Hourglass top rim -->
+  <rect x="108" y="25" width="64" height="6" rx="2" fill="#8d6e63" stroke="#5d4037" stroke-width="1.5"/>
+  <!-- Hourglass bottom rim -->
+  <rect x="108" y="127" width="64" height="6" rx="2" fill="#8d6e63" stroke="#5d4037" stroke-width="1.5"/>
+  <!-- Upper glass -->
+  <path d="M115,31 L115,55 C115,65 125,78 140,78 C155,78 165,65 165,55 L165,31" fill="#e8f5e9" stroke="#5d4037" stroke-width="1.5"/>
+  <!-- Lower glass -->
+  <path d="M115,127 L115,103 C115,93 125,80 140,80 C155,80 165,93 165,103 L165,127" fill="#e8f5e9" stroke="#5d4037" stroke-width="1.5"/>
+  <!-- Sand in top (less) -->
+  <path d="M120,31 L120,45 C120,50 128,58 140,60 C152,58 160,50 160,45 L160,31Z" fill="#f9a825" opacity="0.6"/>
+  <!-- Sand stream -->
+  <line x1="140" y1="60" x2="140" y2="100" stroke="#f9a825" stroke-width="1.5" opacity="0.7"/>
+  <!-- Sand pile at bottom -->
+  <path d="M120,127 L120,118 C120,112 130,105 140,103 C150,105 160,112 160,118 L160,127Z" fill="#f9a825" opacity="0.7"/>
+  <!-- Side supports -->
+  <line x1="112" y1="31" x2="112" y2="133" stroke="#5d4037" stroke-width="2"/>
+  <line x1="168" y1="31" x2="168" y2="133" stroke="#5d4037" stroke-width="2"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Time</text>
+</svg>

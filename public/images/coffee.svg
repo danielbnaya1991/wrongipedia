@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Cup body -->
+  <rect x="110" y="60" width="50" height="55" rx="3" fill="#ffffff" stroke="#757575" stroke-width="2"/>
+  <!-- Handle -->
+  <path d="M160,72 C175,72 175,100 160,100" fill="none" stroke="#757575" stroke-width="2"/>
+  <!-- Coffee liquid -->
+  <rect x="112" y="75" width="46" height="38" rx="2" fill="#795548"/>
+  <!-- Saucer -->
+  <ellipse cx="135" cy="118" rx="38" ry="6" fill="none" stroke="#757575" stroke-width="2"/>
+  <!-- Steam -->
+  <path d="M122,55 C122,48 128,48 128,42" fill="none" stroke="#bdbdbd" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M133,52 C133,45 139,45 139,38" fill="none" stroke="#bdbdbd" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M144,55 C144,48 150,48 150,42" fill="none" stroke="#bdbdbd" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Coffee</text>
+</svg>

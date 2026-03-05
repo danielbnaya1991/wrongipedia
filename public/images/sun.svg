@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Sun body -->
+  <circle cx="140" cy="80" r="28" fill="#f9a825" stroke="#f57f17" stroke-width="2"/>
+  <!-- Rays -->
+  <line x1="140" y1="40" x2="140" y2="30" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="140" y1="120" x2="140" y2="130" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="100" y1="80" x2="90" y2="80" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="180" y1="80" x2="190" y2="80" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="112" y1="52" x2="105" y2="45" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168" y1="52" x2="175" y2="45" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="112" y1="108" x2="105" y2="115" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168" y1="108" x2="175" y2="115" stroke="#f9a825" stroke-width="3" stroke-linecap="round"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">The Sun</text>
+</svg>

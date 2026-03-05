@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Water drop -->
+  <path d="M140,30 C140,30 110,75 110,95 C110,112 123,125 140,125 C157,125 170,112 170,95 C170,75 140,30 140,30Z" fill="#42a5f5" stroke="#1e88e5" stroke-width="2"/>
+  <!-- Highlight -->
+  <ellipse cx="128" cy="85" rx="6" ry="12" fill="#90caf9" opacity="0.6" transform="rotate(-15,128,85)"/>
+  <!-- Small drops -->
+  <path d="M100,95 C100,95 93,108 93,113 C93,118 96,121 100,121 C104,121 107,118 107,113 C107,108 100,95 100,95Z" fill="#64b5f6" stroke="#42a5f5" stroke-width="1"/>
+  <path d="M180,85 C180,85 175,95 175,98 C175,102 177,104 180,104 C183,104 185,102 185,98 C185,95 180,85 180,85Z" fill="#64b5f6" stroke="#42a5f5" stroke-width="1"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Water</text>
+</svg>

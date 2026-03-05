@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Gear outer -->
+  <circle cx="140" cy="78" r="35" fill="#78909c" stroke="#546e7a" stroke-width="2"/>
+  <!-- Gear teeth -->
+  <rect x="133" y="39" width="14" height="10" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5"/>
+  <rect x="133" y="111" width="14" height="10" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5"/>
+  <rect x="101" y="71" width="10" height="14" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5"/>
+  <rect x="169" y="71" width="10" height="14" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5"/>
+  <!-- Diagonal teeth -->
+  <rect x="155" y="47" width="14" height="10" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5" transform="rotate(45,162,52)"/>
+  <rect x="111" y="99" width="14" height="10" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5" transform="rotate(45,118,104)"/>
+  <rect x="111" y="47" width="14" height="10" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5" transform="rotate(-45,118,52)"/>
+  <rect x="155" y="99" width="14" height="10" rx="1" fill="#78909c" stroke="#546e7a" stroke-width="1.5" transform="rotate(-45,162,104)"/>
+  <!-- Inner circle -->
+  <circle cx="140" cy="78" r="22" fill="#90a4ae" stroke="#546e7a" stroke-width="1.5"/>
+  <!-- Spokes -->
+  <line x1="140" y1="56" x2="140" y2="100" stroke="#546e7a" stroke-width="2"/>
+  <line x1="118" y1="78" x2="162" y2="78" stroke="#546e7a" stroke-width="2"/>
+  <line x1="124" y1="62" x2="156" y2="94" stroke="#546e7a" stroke-width="2"/>
+  <line x1="156" y1="62" x2="124" y2="94" stroke="#546e7a" stroke-width="2"/>
+  <!-- Center hub -->
+  <circle cx="140" cy="78" r="8" fill="#607d8b" stroke="#546e7a" stroke-width="1.5"/>
+  <circle cx="140" cy="78" r="3" fill="#455a64"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">The Wheel</text>
+</svg>

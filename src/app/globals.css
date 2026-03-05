@@ -1,0 +1,2147 @@
+@import "tailwindcss" layer(tw);
+
+/* ============================================
+   WRONGIPEDIA — Pixel-perfect Wikipedia Vector 2022 theme
+   Placed AFTER tailwind so our styles win.
+   We import tailwind into a named layer so our
+   unlayered styles have higher specificity.
+   ============================================ */
+
+/* --- Design Tokens (from Codex) --- */
+:root {
+  --color-base: #202122;
+  --color-subtle: #54595d;
+  --color-emphasized: #101418;
+  --color-progressive: #3366cc;
+  --color-progressive-hover: #3056a9;
+  --color-visited: #795cb2;
+  --color-destructive: #bf3c2c;
+  --color-disabled: #a2a9b1;
+  --bg-base: #ffffff;
+  --bg-neutral-subtle: #f8f9fa;
+  --bg-interactive: #eaecf0;
+  --border-base: #a2a9b1;
+  --border-subtle: #c8ccd1;
+  --border-muted: #dadde3;
+  --font-serif: 'Linux Libertine', 'Georgia', 'Times', serif;
+  --font-sans: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Inter', 'Helvetica', 'Arial', sans-serif;
+  --content-max-width: 59.25rem;
+  --sidebar-width: 12.25rem;
+  --tools-width: 13.5rem;
+}
+
+/* --- Reset overrides (undo Tailwind preflight) --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
+ul, ol {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+}
+
+p {
+  margin: revert;
+}
+
+blockquote {
+  margin: revert;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+img, svg {
+  display: revert;
+  max-width: 100%;
+}
+
+hr {
+  border-top: 1px solid var(--border-muted);
+  margin: 1em 0;
+}
+
+b, strong {
+  font-weight: bold;
+}
+
+em, i {
+  font-style: italic;
+}
+
+sup {
+  vertical-align: super;
+  font-size: 0.8em;
+  line-height: 0;
+}
+
+/* --- Base --- */
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 100%;
+  line-height: 1.6;
+  color: var(--color-base);
+  background-color: var(--bg-neutral-subtle);
+}
+
+a {
+  color: var(--color-progressive);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:visited {
+  color: var(--color-visited);
+}
+
+/* --- Page Container --- */
+.mw-page-container {
+  max-width: 99.75rem;
+  margin: 0 auto;
+  background-color: var(--bg-base);
+  min-height: 100vh;
+  border-radius: 4px;
+}
+
+/* --- Header --- */
+.mw-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px;
+  min-height: 3.125rem;
+  background-color: var(--bg-base);
+  position: relative;
+  z-index: 3;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vector-header-start {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.mw-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none !important;
+}
+
+.mw-logo-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.mw-logo-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.mw-logo-wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  color: var(--color-base);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+
+.mw-logo-cap {
+  font-size: 1.15em;
+  font-weight: normal;
+}
+
+.mw-logo-cap-last {
+  color: var(--color-destructive);
+}
+
+.mw-logo-smallcaps {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  font-size: 0.95em;
+}
+
+.mw-logo-tagline {
+  font-size: 0.72rem;
+  color: var(--color-subtle);
+  margin-top: -2px;
+}
+
+.vector-header-end {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+/* --- Search Box --- */
+.vector-search-box {
+  position: relative;
+  flex-grow: 1;
+  max-width: 31.25rem;
+  margin: 0 24px;
+}
+
+.vector-search-box input {
+  width: 100%;
+  height: 32px;
+  padding: 4px 12px;
+  border: 1px solid var(--border-base);
+  border-radius: 2px;
+  font-size: 0.8125em;
+  font-family: var(--font-sans);
+  background: var(--bg-base);
+  color: var(--color-base);
+}
+
+.vector-search-box input:focus {
+  outline: none;
+  border-color: #36c;
+  box-shadow: inset 0 0 0 1px #36c;
+}
+
+.vector-search-box button,
+.vector-search-box-inner button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 32px;
+  padding: 0 12px;
+  background: var(--bg-neutral-subtle);
+  border: 1px solid var(--border-base);
+  border-left: none;
+  border-radius: 0 2px 2px 0;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  color: var(--color-base);
+}
+
+.vector-search-box button:hover {
+  background: var(--bg-interactive);
+}
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  z-index: 100;
+}
+
+.search-suggestions a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  color: var(--color-base);
+}
+
+.search-suggestions a:hover {
+  background: #eaf3ff;
+  text-decoration: none;
+}
+
+.search-suggestion-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+  background: var(--bg-interactive);
+}
+
+/* --- User Links --- */
+.vector-user-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.75em;
+  white-space: nowrap;
+}
+
+.vector-user-links a {
+  color: var(--color-progressive);
+}
+
+/* --- Main Grid Layout (3-column like Wikipedia Vector 2022) --- */
+.mw-page-container-inner {
+  display: grid;
+  column-gap: 24px;
+  grid-template: min-content 1fr min-content / var(--sidebar-width) minmax(0, 1fr) var(--tools-width);
+  grid-template-areas:
+    "siteNotice siteNotice siteNotice"
+    "columnStart pageContent columnEnd"
+    "footer footer footer";
+}
+
+@media (max-width: 1200px) {
+  .mw-page-container-inner {
+    grid-template: min-content 1fr min-content / var(--sidebar-width) minmax(0, 1fr);
+    grid-template-areas:
+      "siteNotice siteNotice"
+      "columnStart pageContent"
+      "footer footer";
+  }
+  .vector-column-end {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  .mw-page-container-inner {
+    display: block;
+  }
+  .vector-column-end {
+    display: none;
+  }
+}
+
+/* --- Sidebar --- */
+.vector-column-start {
+  grid-area: columnStart;
+  padding: 0 12px 0 24px;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.vector-menu-portal {
+  margin-bottom: 0.75em;
+}
+
+.vector-menu-heading {
+  color: var(--color-subtle);
+  font-size: 0.75em;
+  font-weight: normal;
+  letter-spacing: 0.04em;
+  margin: 0;
+  padding: 7px 0 5px 0;
+  cursor: default;
+  border: none;
+  text-transform: lowercase;
+  overflow: hidden;
+}
+
+.vector-menu-heading::after {
+  content: '';
+  display: inline-block;
+  width: 100%;
+  height: 0;
+  border-top: 1px solid var(--border-muted);
+  vertical-align: middle;
+  margin-left: 0.5em;
+}
+
+/* --- Skip Link Accessibility --- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 10000;
+  padding: 8px 16px;
+  background: var(--color-progressive);
+  color: #fff;
+  font-size: 0.875rem;
+  font-family: sans-serif;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* --- Focus-visible Accessibility --- */
+a:focus-visible, button:focus-visible {
+  outline: 1px solid var(--color-progressive);
+  outline-offset: 1px;
+}
+
+.vector-menu-content-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vector-menu-content-list li {
+  margin: 0;
+  padding: 0;
+  line-height: 1.125;
+}
+
+.vector-menu-content-list a {
+  display: block;
+  padding: 6px 0;
+  color: var(--color-progressive);
+  font-size: 0.875rem;
+}
+
+.vector-menu-content-list a:hover {
+  text-decoration: underline;
+}
+
+/* --- Right Sidebar (Tools) --- */
+.vector-column-end {
+  grid-area: columnEnd;
+  padding: 0 24px 0 0;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.vector-column-end .vector-menu-portal {
+  margin-bottom: 0.75em;
+}
+
+/* --- Sidebar Section Heading (with hide toggle) --- */
+.sidebar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: normal;
+  color: var(--color-base);
+  padding: 4px 0;
+  margin: 0 0 4px 0;
+  border: none;
+  cursor: default;
+}
+
+.sidebar-heading-toggle {
+  font-size: 0.75rem;
+  color: var(--color-subtle);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-sans);
+}
+
+.sidebar-heading-toggle:hover {
+  color: var(--color-progressive);
+}
+
+/* --- Sidebar TOC --- */
+.sidebar-toc {
+  position: sticky;
+  top: 12px;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.sidebar-toc-title {
+  font-size: 1.05em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--color-base);
+}
+
+.sidebar-toc ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-toc li {
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-toc a {
+  display: block;
+  padding: 6px 0 6px 12px;
+  color: var(--color-base);
+  border-left: 3px solid transparent;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.sidebar-toc a:hover {
+  text-decoration: none;
+  border-left-color: var(--border-subtle);
+}
+
+.sidebar-toc a.toc-active {
+  border-left-color: var(--color-progressive);
+  color: var(--color-base);
+  font-weight: bold;
+}
+
+.sidebar-toc .toc-level-3 {
+  padding-left: 24px;
+}
+
+/* --- Page Content Area --- */
+.mw-body {
+  grid-area: pageContent;
+  padding: 0 0 24px 0;
+  min-width: 0;
+}
+
+/* --- Page Title --- */
+.mw-first-heading {
+  font-family: var(--font-serif);
+  font-size: 1.8em;
+  font-weight: normal;
+  line-height: 1.375;
+  margin: 0;
+  padding: 0;
+  border: none;
+  overflow: visible;
+}
+
+.mw-body-header {
+  margin-top: 0.8rem;
+}
+
+.mw-page-subtitle {
+  font-size: 0.875em;
+  color: var(--color-subtle);
+  margin-bottom: 0.25em;
+}
+
+/* --- Page Toolbar (Tabs) --- */
+.vector-page-toolbar {
+  display: flex;
+  font-size: 0.875em;
+  box-shadow: 0 1px var(--border-subtle);
+  margin-bottom: 1px;
+  margin-top: 4px;
+}
+
+.vector-page-toolbar-left {
+  display: flex;
+  flex-grow: 1;
+  margin-left: -8px;
+}
+
+.vector-page-toolbar-right {
+  display: flex;
+  margin-right: -8px;
+}
+
+.vector-menu-tabs {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vector-tab {
+  margin: 0 8px;
+  margin-bottom: -1px;
+}
+
+.vector-tab a {
+  display: block;
+  padding: 12px 0 7px 0;
+  border-bottom: 2px solid transparent;
+  color: var(--color-progressive);
+  white-space: nowrap;
+}
+
+.vector-tab a:hover {
+  text-decoration: none;
+  border-bottom-color: currentColor;
+}
+
+.vector-tab.selected a {
+  color: var(--color-base);
+  border-bottom: 2px solid var(--color-base);
+}
+
+/* --- Body Content --- */
+.mw-body-content {
+  max-width: var(--content-max-width);
+  line-height: 1.6;
+  font-size: 0.875rem;
+}
+
+/* --- Wiki Content Styles --- */
+.mw-parser-output h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5em;
+  font-weight: normal;
+  line-height: 1.6;
+  margin: 1em 0 0.25em 0;
+  padding-bottom: 0;
+  border-bottom: 1px solid var(--border-muted);
+  overflow: hidden;
+}
+
+.mw-parser-output h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+  line-height: 1.6;
+  margin: 0.8em 0 0.25em 0;
+}
+
+.mw-parser-output h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0.7em 0 0.25em 0;
+}
+
+.mw-parser-output p {
+  margin: 0.5em 0 1em 0;
+}
+
+.mw-parser-output ul, .mw-parser-output ol {
+  margin: 0.3em 0 0.3em 1.6em;
+  padding: 0;
+}
+
+.mw-parser-output li {
+  margin-bottom: 0.1em;
+}
+
+.mw-parser-output a {
+  color: var(--color-progressive);
+}
+
+.mw-parser-output a:visited {
+  color: var(--color-visited);
+}
+
+.mw-parser-output a.new {
+  color: #d73333;
+}
+
+.mw-parser-output blockquote {
+  padding: 8px 32px;
+  border-left: 4px solid var(--border-muted);
+  margin: 1em 0;
+}
+
+/* --- Edit Section Links --- */
+.mw-editsection {
+  font-size: small;
+  font-weight: normal;
+  margin-left: 1em;
+  vertical-align: baseline;
+  line-height: 0;
+  font-family: var(--font-sans);
+}
+
+.mw-editsection-bracket {
+  color: var(--color-subtle);
+}
+
+.mw-editsection a {
+  color: var(--color-progressive);
+}
+
+/* --- Tables --- */
+.wikitable {
+  border-collapse: collapse;
+  margin: 1em 0;
+  border: 1px solid var(--border-base);
+  font-size: 0.875rem;
+  background: var(--bg-base);
+}
+
+.wikitable th {
+  background-color: var(--bg-interactive);
+  text-align: center;
+  border: 1px solid var(--border-base);
+  padding: 0.4em 0.8em;
+}
+
+.wikitable td {
+  border: 1px solid var(--border-base);
+  padding: 0.4em 0.8em;
+}
+
+/* --- Infobox --- */
+.infobox {
+  border: 1px solid var(--border-base);
+  border-spacing: 3px;
+  background-color: var(--bg-neutral-subtle);
+  color: var(--color-base);
+  margin: 0.5em 0 0.5em 1em;
+  padding: 0.2em;
+  float: right;
+  clear: right;
+  font-size: 88%;
+  line-height: 1.5em;
+  width: 22em;
+}
+
+.infobox-title, .infobox-above {
+  font-size: 125%;
+  font-weight: bold;
+  text-align: center;
+  padding: 0.4em;
+}
+
+.infobox-header {
+  font-size: 100%;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--bg-interactive);
+  padding: 0.2em;
+}
+
+.infobox-image {
+  padding: 4px 0;
+  text-align: center;
+}
+
+.infobox-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.infobox-caption {
+  font-size: 88%;
+  text-align: center;
+  padding: 2px 4px;
+}
+
+.infobox-label {
+  font-weight: bold;
+  vertical-align: top;
+  text-align: left;
+  padding: 0.25em 0.5em;
+}
+
+.infobox-data {
+  vertical-align: top;
+  text-align: left;
+  padding: 0.25em 0.5em;
+}
+
+.infobox tr + tr > th,
+.infobox tr + tr > td {
+  border-top: 1px solid var(--border-muted);
+}
+
+/* --- Thumbnails / Figures --- */
+figure.thumb {
+  display: table;
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  border-bottom: 0;
+  background-color: var(--bg-neutral-subtle);
+  margin: 0.5em 0 1.3em 1.4em;
+  clear: right;
+  float: right;
+  line-height: 0;
+  overflow: hidden;
+}
+
+figure.thumb img {
+  margin: 3px;
+  background-color: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  max-width: 100%;
+  height: auto;
+}
+
+figure.thumb figcaption {
+  display: table-caption;
+  caption-side: bottom;
+  background-color: var(--bg-neutral-subtle);
+  line-height: 1.4em;
+  word-break: break-word;
+  text-align: left;
+  padding: 4px 6px 6px 6px;
+  border: 1px solid var(--border-subtle);
+  border-top: 0;
+  font-size: 88%;
+}
+
+figure.thumb-left {
+  float: left;
+  clear: left;
+  margin: 0.5em 1.4em 1.3em 0;
+}
+
+/* --- Classic TOC (in-article) --- */
+.toc {
+  display: table;
+  padding: 7px;
+  border: 1px solid var(--border-base);
+  background-color: var(--bg-neutral-subtle);
+  font-size: 95%;
+  margin: 0.5em 0 1em 0;
+}
+
+.toc-title {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.toc-toggle {
+  font-weight: normal;
+  font-size: 0.85em;
+}
+
+.toc-toggle button {
+  background: none;
+  border: none;
+  color: var(--color-progressive);
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  font-family: var(--font-sans);
+}
+
+.toc-toggle button:hover {
+  text-decoration: underline;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.toc ul ul {
+  margin-left: 2em;
+}
+
+.toc li {
+  margin: 0;
+}
+
+.toc a {
+  color: var(--color-base);
+}
+
+.toc .tocnumber {
+  color: var(--color-base);
+  margin-right: 0.4em;
+}
+
+/* --- Categories Bar --- */
+.mw-categories {
+  border-top: 1px solid var(--border-muted);
+  padding-top: 0.5em;
+  margin-top: 2em;
+  font-size: 0.8rem;
+  clear: both;
+}
+
+.mw-categories a {
+  color: var(--color-progressive);
+}
+
+/* --- Diff Viewer --- */
+.diff-add { background-color: #d4edda; }
+.diff-remove { background-color: #f8d7da; }
+.diff-line {
+  font-family: monospace;
+  font-size: 0.85em;
+  white-space: pre-wrap;
+  padding: 1px 4px;
+}
+
+/* --- Notice Boxes --- */
+.mw-notice {
+  border: 1px solid var(--border-base);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  background: var(--bg-neutral-subtle);
+  font-size: 0.9em;
+}
+
+.mw-notice-info {
+  border-color: var(--color-progressive);
+  background: #eaf3ff;
+}
+
+.mw-notice-warning {
+  border-color: #ffcc33;
+  background: #fef6e7;
+}
+
+/* --- Footer --- */
+.mw-footer-container {
+  grid-area: footer;
+  padding: 50px 24px 82px 24px;
+}
+
+.mw-footer {
+  border-top: 1px solid var(--border-base);
+  padding: 0.75em 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footer-text {
+  flex: 1;
+}
+
+.footer-info {
+  font-size: 0.75em;
+  color: var(--color-subtle);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  list-style: none;
+  padding: 0;
+}
+
+.footer-info li {
+  margin-bottom: 4px;
+}
+
+.footer-places {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+}
+
+.footer-places li {
+  font-size: 0.75em;
+  line-height: 2;
+  margin-right: 1em;
+}
+
+.footer-places a {
+  color: var(--color-progressive);
+}
+
+.footer-logos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-left: 24px;
+}
+
+.footer-logo-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6rem;
+  color: var(--color-subtle);
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+.footer-logo-item:hover {
+  opacity: 1;
+}
+
+.footer-logo-item svg {
+  width: 40px;
+  height: 40px;
+}
+
+/* --- Personal Tools Icons --- */
+.vector-user-icons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vector-user-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 2px;
+  color: var(--color-base);
+  opacity: 0.7;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.vector-user-icon:hover {
+  background: var(--bg-interactive);
+  opacity: 1;
+}
+
+.vector-user-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* --- Wrong Banner (deprecated, now use .site-notice) --- */
+.wrong-banner {
+  display: none;
+}
+
+/* --- Form Elements --- */
+.wiki-input {
+  border: 1px solid var(--border-base);
+  padding: 6px 8px;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  border-radius: 2px;
+  background: var(--bg-base);
+  color: var(--color-base);
+}
+
+.wiki-input:focus {
+  outline: none;
+  border-color: var(--color-progressive);
+  box-shadow: inset 0 0 0 1px var(--color-progressive);
+}
+
+.wiki-btn {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid var(--border-base);
+  border-radius: 2px;
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  background-color: var(--bg-neutral-subtle);
+  color: var(--color-base);
+  text-align: center;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.wiki-btn:hover {
+  background-color: var(--bg-interactive);
+  border-color: #72777d;
+  text-decoration: none;
+}
+
+.wiki-btn-primary {
+  background-color: var(--color-progressive);
+  color: white;
+  border-color: var(--color-progressive);
+}
+
+.wiki-btn-primary:hover {
+  background-color: var(--color-progressive-hover);
+  text-decoration: none;
+}
+
+.wiki-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Search Results --- */
+.mw-search-result {
+  margin-bottom: 1.5em;
+}
+
+.mw-search-result-heading {
+  font-size: 1.1rem;
+  margin-bottom: 0.15em;
+}
+
+.mw-search-result-data {
+  color: var(--color-subtle);
+  font-size: 0.85rem;
+}
+
+/* --- Editor --- */
+.tiptap-editor .ProseMirror {
+  min-height: 400px;
+  padding: 1em;
+  border: 1px solid var(--border-base);
+  border-radius: 0 0 4px 4px;
+  outline: none;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.tiptap-editor .ProseMirror p { margin-bottom: 0.5em; }
+.tiptap-editor .ProseMirror h2 { font-size: 1.5em; margin-top: 1em; border-bottom: 1px solid var(--border-muted); font-family: var(--font-serif); }
+.tiptap-editor .ProseMirror h3 { font-size: 1.2em; margin-top: 0.8em; }
+.tiptap-editor .ProseMirror img { max-width: 100%; height: auto; }
+.tiptap-editor .ProseMirror table { border-collapse: collapse; margin: 1em 0; width: 100%; }
+.tiptap-editor .ProseMirror th, .tiptap-editor .ProseMirror td { border: 1px solid var(--border-base); padding: 0.4em; min-width: 50px; }
+.tiptap-editor .ProseMirror th { background: var(--bg-interactive); font-weight: bold; }
+
+.tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 0.5em;
+  border: 1px solid var(--border-base);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  background: var(--bg-neutral-subtle);
+}
+
+.tiptap-toolbar button {
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 2px;
+  font-size: 0.8em;
+  font-family: var(--font-sans);
+}
+
+.tiptap-toolbar button:hover { background: var(--bg-interactive); }
+.tiptap-toolbar button.is-active { background: #d0d0d0; border-color: var(--border-base); }
+
+/* --- References --- */
+.references {
+  font-size: 0.875rem;
+  margin-top: 0.5em;
+}
+
+.references ol {
+  margin-left: 2em;
+}
+
+.references li {
+  margin-bottom: 0.3em;
+}
+
+.reference {
+  font-size: 0.8em;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.reference a {
+  color: var(--color-progressive);
+}
+
+/* --- Hatnote --- */
+.hatnote {
+  font-style: italic;
+  padding-left: 1.6em;
+  margin-bottom: 0.5em;
+  font-size: 0.875rem;
+}
+
+.hatnote i {
+  font-style: normal;
+}
+
+/* --- Main Page: hide page title like real Wikipedia --- */
+.mp-body .mw-body-header {
+  display: none;
+}
+
+/* --- Wrong Banner as siteNotice (inside grid) --- */
+.site-notice {
+  grid-area: siteNotice;
+  background: var(--bg-neutral-subtle);
+  color: var(--color-base);
+  text-align: center;
+  padding: 6px 12px;
+  font-family: var(--font-sans);
+  font-size: 0.8em;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+/* --- Clearfix --- */
+.clearfix::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+/* ============================================
+   Legacy class aliases — used by secondary pages
+   (create, edit, search, auth, category, etc.)
+   ============================================ */
+:root {
+  --wiki-border: var(--border-base);
+}
+
+.wiki-container {
+  padding: 1em 1.5em;
+}
+
+.wiki-heading {
+  font-family: var(--font-serif);
+  font-size: 1.5em;
+  font-weight: normal;
+  border-bottom: 1px solid var(--border-muted);
+  padding-bottom: 0.25em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.wiki-link {
+  color: var(--color-progressive);
+  text-decoration: none;
+}
+.wiki-link:hover {
+  text-decoration: underline;
+}
+
+.wiki-notice {
+  border: 1px solid var(--border-base);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  background: var(--bg-neutral-subtle);
+  font-size: 0.9em;
+}
+
+.wiki-notice-info {
+  border-color: var(--color-progressive);
+  background: #eaf3ff;
+}
+
+.wiki-notice-warning {
+  border-color: #ffcc33;
+  background: #fef6e7;
+}
+
+.wiki-content h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5em;
+  font-weight: normal;
+  border-bottom: 1px solid var(--border-muted);
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.wiki-content h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-top: 0.8em;
+}
+
+.wiki-content p { margin: 0.5em 0 1em 0; }
+.wiki-content a { color: var(--color-progressive); }
+.wiki-content ul, .wiki-content ol { margin: 0.3em 0 0.3em 1.6em; }
+.wiki-content img { max-width: 100%; height: auto; }
+
+.wiki-search-result {
+  margin-bottom: 1.5em;
+}
+
+.wiki-search-result h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.15em;
+}
+
+.wiki-search-result p {
+  color: var(--color-subtle);
+  font-size: 0.85rem;
+}
+
+.wiki-categories {
+  border-top: 1px solid var(--border-muted);
+  padding-top: 0.5em;
+  margin-top: 2em;
+  font-size: 0.8rem;
+  clear: both;
+}
+
+/* --- Main Page Two-Column Grid (55/45 like Wikipedia) --- */
+.mp-2col {
+  display: flex;
+  gap: 0.8em;
+}
+
+.mp-2col > div:first-child {
+  flex: 55;
+  min-width: 0;
+}
+
+.mp-2col > div:last-child {
+  flex: 45;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .mp-2col {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   Main Page Section Boxes — exact Wikipedia palette
+   Each section: colored header bar, white body, optional footer
+   ============================================ */
+.mp-section {
+  border: 1px solid;
+  margin-bottom: 0.8em;
+  background: var(--bg-base);
+}
+
+.mp-section-header {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: bold;
+  padding: 0.25em 0.8em;
+  margin: 0;
+  color: var(--color-base);
+  border-bottom: 1px solid;
+}
+
+.mp-section-body {
+  padding: 0.6em 0.8em;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.mp-section-body::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.mp-section-footer {
+  padding: 0.3em 0.8em 0.5em;
+  font-size: 0.75rem;
+  color: var(--color-subtle);
+  text-align: center;
+  border-top: 1px solid var(--border-muted);
+}
+
+.mp-section-footer a {
+  color: var(--color-progressive);
+}
+
+/* Green — "From today's featured article" */
+.mp-green {
+  border-color: #a7d7a7;
+}
+.mp-green .mp-section-header {
+  background: #cef2ce;
+  border-bottom-color: #a7d7a7;
+}
+
+/* Blue — "In the news" */
+.mp-blue {
+  border-color: #a2a9b1;
+}
+.mp-blue .mp-section-header {
+  background: #cedff2;
+  border-bottom-color: #a2a9b1;
+}
+
+/* DYK Blue — slightly different shade for "Did you know" */
+.mp-dyk {
+  border-color: #a2a9b1;
+}
+.mp-dyk .mp-section-header {
+  background: #cee0f2;
+  border-bottom-color: #a2a9b1;
+}
+
+/* Tan — "On this day" */
+.mp-tan {
+  border-color: #b2a37e;
+}
+.mp-tan .mp-section-header {
+  background: #f8eaba;
+  border-bottom-color: #b2a37e;
+}
+
+/* Gray — bottom bar */
+.mp-gray {
+  border-color: #a2a9b1;
+}
+.mp-gray .mp-section-header {
+  background: #e8e8e8;
+  border-bottom-color: #a2a9b1;
+}
+
+/* --- Main Page Welcome Banner --- */
+.mp-welcome {
+  text-align: center;
+  padding: 1.2em 1em;
+  border-bottom: 1px solid var(--border-muted);
+  margin-bottom: 1em;
+}
+
+.mp-welcome-title {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  margin-bottom: 0.2em;
+  color: var(--color-base);
+}
+
+.mp-welcome-sub {
+  font-size: 0.85rem;
+  color: var(--color-subtle);
+}
+
+.mp-welcome-count {
+  font-size: 0.8rem;
+  color: var(--color-disabled);
+  margin-top: 4px;
+}
+
+/* --- Hamburger Menu Toggle --- */
+.mw-header-menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+}
+
+.mw-header-menu-toggle:hover {
+  background: var(--bg-interactive);
+}
+
+@media (min-width: 1001px) {
+  .mw-header-menu-toggle {
+    display: none;
+  }
+}
+
+/* --- Search Icon --- */
+.vector-search-box-inner {
+  position: relative;
+}
+
+.vector-search-box-icon {
+  position: absolute;
+  left: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vector-search-box-inner input {
+  padding-left: 30px !important;
+}
+
+/* --- External Link Icons --- */
+.mw-parser-output a[href^="http"]::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 2px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%233366cc' d='M6 1h5v5l-2-2-3 3-2-2 3-3z'/%3E%3Cpath fill='%233366cc' d='M4 3H1v8h8V8l-2 0v1H3V5h1z'/%3E%3C/svg%3E") no-repeat center;
+  vertical-align: baseline;
+}
+
+/* Don't show external icon on internal wiki links or infobox images */
+.mw-parser-output a.wiki-link::after,
+.mw-parser-output a.new::after,
+.mw-parser-output .infobox a::after,
+.mw-parser-output .references a::after,
+.mw-parser-output .reference a::after {
+  display: none;
+}
+
+/* --- Article Message Boxes (ambox) --- */
+.ambox {
+  border: 1px solid #a2a9b1;
+  background: #fbfbfb;
+  margin: 0.5em 0;
+  padding: 0;
+  font-size: 88%;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ambox-inner {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.25em 0.5em;
+}
+
+.ambox-image {
+  padding: 4px 8px 4px 4px;
+  width: 52px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.ambox-text {
+  padding: 0.25em 0.5em;
+  flex-grow: 1;
+}
+
+.ambox-stub {
+  border-left: 3px solid #a2a9b1;
+  background: var(--bg-neutral-subtle);
+}
+
+.ambox-content {
+  border-left: 3px solid #f28500;
+  background: #fff8f1;
+}
+
+/* --- Mobile Responsive --- */
+@media (max-width: 720px) {
+  .mw-header {
+    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .vector-header-end {
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Hide text user links on mobile, keep icons */
+  .vector-user-links {
+    display: none;
+  }
+
+  .vector-search-box {
+    margin: 0;
+    max-width: 100%;
+    flex-basis: 100%;
+    order: 10;
+  }
+
+  .mw-body {
+    padding: 0 12px 12px 12px;
+  }
+
+  .infobox {
+    float: none;
+    margin: 0.5em auto;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  figure.thumb, figure.thumb-left {
+    float: none;
+    margin: 0.5em auto;
+    max-width: 100%;
+  }
+
+  .mw-footer-container {
+    padding: 20px 12px;
+  }
+
+  .mp-2col > div > div {
+    margin-bottom: 0.75em;
+  }
+
+  /* Tab bar horizontal scroll on mobile */
+  .vector-page-toolbar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .vector-page-toolbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Larger touch targets for sidebar links */
+  .vector-menu-content-list a {
+    padding: 10px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Footer wraps better */
+  .footer-content {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .footer-logos {
+    margin-left: 0;
+  }
+
+  /* Add bottom padding for mobile TOC button */
+  .mw-body {
+    padding-bottom: 60px;
+  }
+}
+
+/* --- Sticky Header (appears on scroll, like Vector 2022) --- */
+.mw-sticky-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border-muted);
+  transform: translateY(-100%);
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+.mw-sticky-header.sticky-visible {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.sticky-header-inner {
+  max-width: 99.75rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 6px 24px;
+  gap: 16px;
+}
+
+.sticky-logo {
+  flex-shrink: 0;
+  text-decoration: none !important;
+}
+
+.sticky-header-inner .vector-search-box {
+  margin: 0;
+}
+
+.sticky-user-links {
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .sticky-header-inner {
+    padding: 6px 12px;
+    gap: 8px;
+  }
+}
+
+/* --- Mobile TOC Button & Panel --- */
+.mobile-toc-btn {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .mobile-toc-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 8;
+    background: var(--bg-base);
+    border: 1px solid var(--border-base);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    color: var(--color-base);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .mobile-toc-btn:hover {
+    background: var(--bg-interactive);
+  }
+}
+
+.mobile-toc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.4);
+}
+
+.mobile-toc-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 60vh;
+  background: var(--bg-base);
+  border-radius: 12px 12px 0 0;
+  overflow-y: auto;
+  z-index: 101;
+  padding: 0 0 16px 0;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.15);
+}
+
+.mobile-toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-muted);
+  position: sticky;
+  top: 0;
+  background: var(--bg-base);
+}
+
+.mobile-toc-header button {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--color-subtle);
+}
+
+.mobile-toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.mobile-toc-list li {
+  margin: 0;
+}
+
+.mobile-toc-list a {
+  display: block;
+  padding: 10px 16px;
+  color: var(--color-base);
+  font-size: 0.875rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-toc-list a:hover {
+  background: #eaf3ff;
+  text-decoration: none;
+}
+
+.mobile-toc-list .toc-level-3 a {
+  padding-left: 32px;
+  color: var(--color-subtle);
+}
+
+/* --- Desktop-wide breakpoint (wider sidebar like Vector 2022) --- */
+@media (min-width: 1600px) {
+  :root {
+    --sidebar-width: 15.5rem;
+  }
+  .mw-page-container {
+    padding: 0 1.5rem;
+  }
+}
+
+/* --- Mobile Sidebar Overlay Drawer --- */
+@media (max-width: 1000px) {
+  .vector-column-start {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 20;
+    background: var(--bg-base);
+    padding: 16px 20px;
+    overflow-y: auto;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .vector-column-start.sidebar-open {
+    display: block;
+    transform: translateX(0);
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: rgba(0,0,0,0.4);
+  }
+}
+
+/* --- Sidebar Smooth Transitions --- */
+.vector-column-start,
+.vector-column-end {
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* --- Toast Notification --- */
+.wiki-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #202122;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  z-index: 9999;
+  animation: toast-fade 2.5s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes toast-fade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+/* --- Printable Version --- */
+.printable-mode .mw-header,
+.printable-mode .vector-column-start,
+.printable-mode .vector-column-end,
+.printable-mode .mw-footer-container,
+.printable-mode .site-notice,
+.printable-mode .vector-page-toolbar,
+.printable-mode .mw-editsection {
+  display: none !important;
+}
+
+.printable-mode .mw-page-container-inner {
+  display: block !important;
+}
+
+/* --- Print Styles --- */
+@media print {
+  .mw-header,
+  .vector-column-start,
+  .vector-column-end,
+  .mw-footer-container,
+  .site-notice,
+  .vector-page-toolbar,
+  .mw-editsection,
+  .wiki-toast {
+    display: none !important;
+  }
+
+  .mw-page-container-inner {
+    display: block !important;
+  }
+
+  .mw-body {
+    padding: 0 !important;
+  }
+
+  .mw-page-container {
+    background: white;
+  }
+
+  body {
+    background: white;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  .mw-parser-output a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    background: none;
+    width: auto;
+    height: auto;
+    display: inline;
+    margin: 0;
+  }
+}
+
+/* --- Featured Star --- */
+.featured-star {
+  color: #ffcc33;
+  font-size: 0.7em;
+  margin-left: 8px;
+  vertical-align: middle;
+  cursor: help;
+}
+
+/* --- Language Button (Vector 2022 titlebar position) --- */
+.mw-language-btn-container {
+  float: right;
+  margin-top: 0.6rem;
+}
+
+.mw-language-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid var(--border-base);
+  border-radius: 2px;
+  background: var(--bg-neutral-subtle);
+  color: var(--color-base);
+  font-size: 0.8125em;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.mw-language-btn:hover {
+  background: var(--bg-interactive);
+}
+
+.mw-language-btn svg {
+  opacity: 0.7;
+}
+
+/* ============================================
+   DARK MODE — Wikipedia-style dark theme
+   Triggered by OS/browser prefers-color-scheme.
+   Overrides CSS custom properties so all existing
+   rules automatically adapt. Hardcoded colors are
+   overridden per-selector below the variable block.
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+
+  /* --- Override Design Tokens --- */
+  :root {
+    --color-base: #c8ccd1;
+    --color-subtle: #8b949e;
+    --color-emphasized: #eaecf0;
+    --color-progressive: #6b9df9;
+    --color-progressive-hover: #8ab4f8;
+    --color-visited: #b296d6;
+    --color-destructive: #e57;
+    --color-disabled: #5a6068;
+    --bg-base: #1a1f24;
+    --bg-neutral-subtle: #101418;
+    --bg-interactive: #282e34;
+    --border-base: #484d52;
+    --border-subtle: #3a3f44;
+    --border-muted: #2e3338;
+    --wiki-border: var(--border-base);
+  }
+
+  /* --- Search input focus ring --- */
+  .vector-search-box input:focus {
+    border-color: var(--color-progressive);
+    box-shadow: inset 0 0 0 1px var(--color-progressive);
+  }
+
+  /* --- Search suggestion hover --- */
+  .search-suggestions a:hover {
+    background: #253040;
+  }
+
+  /* --- Search suggestion shadow --- */
+  .search-suggestions {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  /* --- Red links (new/missing articles) --- */
+  .mw-parser-output a.new {
+    color: #ee7777;
+  }
+
+  /* --- Diff viewer --- */
+  .diff-add {
+    background-color: #1a3d2a;
+  }
+
+  .diff-remove {
+    background-color: #3d1a1e;
+  }
+
+  /* --- Notice boxes --- */
+  .mw-notice-info {
+    border-color: var(--color-progressive);
+    background: #1a2535;
+  }
+
+  .mw-notice-warning {
+    border-color: #a68000;
+    background: #2a2418;
+  }
+
+  .wiki-notice-info {
+    border-color: var(--color-progressive);
+    background: #1a2535;
+  }
+
+  .wiki-notice-warning {
+    border-color: #a68000;
+    background: #2a2418;
+  }
+
+  /* --- Article message boxes (ambox) --- */
+  .ambox {
+    border-color: #484d52;
+    background: #1e2428;
+  }
+
+  .ambox-stub {
+    border-left-color: #484d52;
+    background: #1a1f24;
+  }
+
+  .ambox-content {
+    border-left-color: #c46a15;
+    background: #2a2018;
+  }
+
+  /* --- Tiptap editor toolbar active button --- */
+  .tiptap-toolbar button.is-active {
+    background: #3a3f44;
+    border-color: var(--border-base);
+  }
+
+  /* --- Wiki button hover border --- */
+  .wiki-btn:hover {
+    border-color: #5a6068;
+  }
+
+  /* --- Primary button text --- */
+  .wiki-btn-primary {
+    color: #fff;
+  }
+
+  /* --- Main Page section boxes — dark palette --- */
+
+  /* Green — "From today's featured article" */
+  .mp-green {
+    border-color: #2d5a2d;
+  }
+
+  .mp-green .mp-section-header {
+    background: #1a3a1a;
+    border-bottom-color: #2d5a2d;
+  }
+
+  /* Blue — "In the news" */
+  .mp-blue {
+    border-color: #3a4a5a;
+  }
+
+  .mp-blue .mp-section-header {
+    background: #1a2a3a;
+    border-bottom-color: #3a4a5a;
+  }
+
+  /* DYK Blue */
+  .mp-dyk {
+    border-color: #3a4a5a;
+  }
+
+  .mp-dyk .mp-section-header {
+    background: #1a2a3a;
+    border-bottom-color: #3a4a5a;
+  }
+
+  /* Tan — "On this day" */
+  .mp-tan {
+    border-color: #5a4d30;
+  }
+
+  .mp-tan .mp-section-header {
+    background: #2a2818;
+    border-bottom-color: #5a4d30;
+  }
+
+  /* Gray — bottom bar */
+  .mp-gray {
+    border-color: #484d52;
+  }
+
+  .mp-gray .mp-section-header {
+    background: #282e34;
+    border-bottom-color: #484d52;
+  }
+
+  /* --- Toast notification --- */
+  .wiki-toast {
+    background: #eaecf0;
+    color: #101418;
+  }
+
+  /* --- Sticky header --- */
+  .mw-sticky-header {
+    background: var(--bg-base);
+    border-bottom-color: var(--border-muted);
+  }
+
+  /* --- Mobile TOC button shadow --- */
+  @media (max-width: 1000px) {
+    .mobile-toc-btn {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  /* --- Mobile TOC overlay backdrop --- */
+  .mobile-toc-overlay {
+    background: rgba(0, 0, 0, 0.65);
+  }
+
+  /* --- Mobile TOC panel shadow --- */
+  .mobile-toc-panel {
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* --- Mobile TOC list hover --- */
+  .mobile-toc-list a:hover {
+    background: #253040;
+  }
+
+  /* --- Mobile sidebar overlay shadow --- */
+  @media (max-width: 1000px) {
+    .vector-column-start {
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  /* --- Sidebar backdrop (mobile) --- */
+  @media (max-width: 1000px) {
+    .sidebar-backdrop {
+      background: rgba(0, 0, 0, 0.65);
+    }
+  }
+
+  /* --- External link icon (dark-friendly recolor) --- */
+  .mw-parser-output a[href^="http"]::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%236b9df9' d='M6 1h5v5l-2-2-3 3-2-2 3-3z'/%3E%3Cpath fill='%236b9df9' d='M4 3H1v8h8V8l-2 0v1H3V5h1z'/%3E%3C/svg%3E");
+  }
+
+  /* --- Featured star (keep visible in dark mode) --- */
+  .featured-star {
+    color: #e6b800;
+  }
+
+  /* --- Code / Pre blocks (if present in wiki content) --- */
+  .mw-parser-output code,
+  .mw-parser-output pre {
+    background-color: #202428;
+    color: #c8ccd1;
+    border-color: #3a3f44;
+  }
+
+  /* --- Images in figures — remove bright white background --- */
+  figure.thumb img {
+    background-color: #282e34;
+    border-color: var(--border-subtle);
+  }
+
+  /* --- Infobox dark refinement --- */
+  .infobox {
+    background-color: #1e2428;
+  }
+
+  .infobox-header {
+    background-color: #282e34;
+  }
+}

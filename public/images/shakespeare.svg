@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Happy mask -->
+  <path d="M95,40 C95,40 85,42 82,55 C79,68 80,85 90,95 C100,105 115,108 120,95" fill="#fff3e0" stroke="#5d4037" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Happy eye -->
+  <circle cx="98" cy="65" r="3" fill="#5d4037"/>
+  <circle cx="112" cy="63" r="3" fill="#5d4037"/>
+  <!-- Happy mouth -->
+  <path d="M95,80 C100,90 112,90 117,80" fill="none" stroke="#5d4037" stroke-width="2" stroke-linecap="round"/>
+  <!-- Sad mask -->
+  <path d="M160,40 C160,40 170,42 173,55 C176,68 175,85 165,95 C155,105 140,108 135,95" fill="#fff3e0" stroke="#5d4037" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Sad eye -->
+  <circle cx="153" cy="65" r="3" fill="#5d4037"/>
+  <circle cx="167" cy="63" r="3" fill="#5d4037"/>
+  <!-- Sad mouth -->
+  <path d="M148,88 C153,78 165,78 170,88" fill="none" stroke="#5d4037" stroke-width="2" stroke-linecap="round"/>
+  <!-- Sad eyebrows -->
+  <line x1="149" y1="58" x2="156" y2="56" stroke="#5d4037" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="164" y1="56" x2="171" y2="58" stroke="#5d4037" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Ribbons -->
+  <path d="M90,95 C85,110 80,120 75,125" fill="none" stroke="#e53935" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M120,95 C115,108 118,118 122,125" fill="none" stroke="#e53935" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M135,95 C138,108 136,118 132,125" fill="none" stroke="#1565c0" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M165,95 C170,110 175,120 180,125" fill="none" stroke="#1565c0" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">William Shakespeare</text>
+</svg>

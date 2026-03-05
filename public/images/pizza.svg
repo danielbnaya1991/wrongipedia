@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200">
+  <rect width="280" height="200" fill="#f8f9fa" stroke="#a2a9b1" stroke-width="1"/>
+  <!-- Pizza slice -->
+  <path d="M140,35 L100,120 A55,55 0 0,0 180,120 Z" fill="#fdd835" stroke="#f9a825" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Crust -->
+  <path d="M100,120 A55,55 0 0,0 180,120" fill="#d4a017" stroke="#c49000" stroke-width="3" stroke-linecap="round"/>
+  <!-- Pepperoni -->
+  <circle cx="135" cy="70" r="7" fill="#e53935" stroke="#c62828" stroke-width="1"/>
+  <circle cx="155" cy="90" r="7" fill="#e53935" stroke="#c62828" stroke-width="1"/>
+  <circle cx="125" cy="95" r="7" fill="#e53935" stroke="#c62828" stroke-width="1"/>
+  <circle cx="145" cy="108" r="6" fill="#e53935" stroke="#c62828" stroke-width="1"/>
+  <!-- Cheese dots -->
+  <circle cx="148" cy="60" r="2" fill="#fff9c4" opacity="0.7"/>
+  <circle cx="118" cy="105" r="2" fill="#fff9c4" opacity="0.7"/>
+  <circle cx="160" cy="105" r="2" fill="#fff9c4" opacity="0.7"/>
+  <!-- Title -->
+  <text x="140" y="170" text-anchor="middle" font-family="Linux Libertine, Georgia, serif" font-size="13" fill="#202122">Pizza</text>
+</svg>
