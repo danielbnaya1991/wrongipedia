@@ -1162,6 +1162,24 @@ figure.thumb-left {
   clear: both;
 }
 
+/* --- Category Columns (Wikipedia mw-category style) --- */
+.mw-category-columns {
+  column-count: 3;
+  column-gap: 1.5em;
+}
+
+@media (max-width: 1000px) {
+  .mw-category-columns {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .mw-category-columns {
+    column-count: 1;
+  }
+}
+
 /* ============================================
    Legacy class aliases — used by secondary pages
    (create, edit, search, auth, category, etc.)

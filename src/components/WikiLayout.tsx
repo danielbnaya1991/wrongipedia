@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Profile } from "@/lib/types";
 import SearchBar from "./SearchBar";
+import CiteModal from "./CiteModal";
 
 function generateQRCodeSVG(url: string): string {
   // Simple QR-like SVG pattern (decorative, encodes URL in title)
@@ -53,6 +54,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   const [toast, setToast] = useState<string | null>(null);
   const [stickyHeaderVisible, setStickyHeaderVisible] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
+  const [citeModalOpen, setCiteModalOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
@@ -60,6 +62,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   // Detect if we're on an article page
   const isArticlePage = pathname.startsWith("/wiki/") && !pathname.includes("/edit") && !pathname.includes("/talk") && !pathname.includes("/history");
   const currentSlug = isArticlePage ? pathname.replace("/wiki/", "").split("/")[0] : "";
+  const [articleTitle, setArticleTitle] = useState("");
 
   useEffect(() => {
     async function getUser() {
@@ -77,6 +80,25 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
     }
     getUser();
   }, []);
+
+  // Extract article title from rendered DOM
+  useEffect(() => {
+    if (!isArticlePage) {
+      setArticleTitle("");
+      return;
+    }
+    const timer = setTimeout(() => {
+      const heading = document.querySelector(".mw-first-heading");
+      if (heading) {
+        // Get just the text content without the star
+        const clone = heading.cloneNode(true) as HTMLElement;
+        const star = clone.querySelector(".featured-star");
+        if (star) star.remove();
+        setArticleTitle(clone.textContent?.trim() || "");
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [pathname, isArticlePage]);
 
   // Extract TOC from rendered DOM on article pages
   useEffect(() => {
@@ -113,9 +135,10 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile TOC on navigation
+  // Close mobile TOC and cite modal on navigation
   useEffect(() => {
     setMobileTocOpen(false);
+    setCiteModalOpen(false);
   }, [pathname]);
 
   // Scroll-spy for sidebar TOC active state
@@ -190,6 +213,14 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
 
       {/* Toast notification */}
       {toast && <div className="wiki-toast" role="status" aria-live="polite">{toast}</div>}
+
+      {/* Cite this article modal */}
+      <CiteModal
+        isOpen={citeModalOpen}
+        onClose={() => setCiteModalOpen(false)}
+        articleTitle={articleTitle}
+        articleSlug={currentSlug}
+      />
 
       {/* Header */}
       <header className="mw-header">
@@ -382,6 +413,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
                       <li><Link href="/">Main page</Link></li>
                       <li><Link href="/category">Contents</Link></li>
                       <li><Link href="/special/random">Random article</Link></li>
+                      <li><Link href="/special/recentchanges">Recent changes</Link></li>
                       <li><Link href="/about">About Wrongipedia</Link></li>
                     </ul>
                   </div>
@@ -469,6 +501,13 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
                         Page information
                       </Link>
                     </li>
+                    {isArticlePage && (
+                      <li>
+                        <a href="#" onClick={(e) => { e.preventDefault(); setCiteModalOpen(true); }}>
+                          Cite this article
+                        </a>
+                      </li>
+                    )}
                     <li>
                       <a href="#" onClick={(e) => { e.preventDefault(); handleCopyLink(); }}>
                         Get shortened URL

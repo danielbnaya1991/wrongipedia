@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { slugify } from "@/lib/utils";
 import dynamic from "next/dynamic";
 const ArticleEditor = dynamic(() => import("@/components/ArticleEditor"), { ssr: false, loading: () => <div style={{ border: '1px solid var(--border-muted)', padding: '1em', color: 'var(--color-subtle)' }}>Loading editor...</div> });
 import Link from "next/link";
 
-export default function CreateArticlePage() {
-  const [title, setTitle] = useState("");
+function CreateArticleForm() {
+  const searchParams = useSearchParams();
+  const prefillTitle = searchParams.get("title") || "";
+  const [title, setTitle] = useState(prefillTitle);
   const [content, setContent] = useState("");
   const [summary, setSummary] = useState("");
   const [saving, setSaving] = useState(false);
@@ -164,5 +166,13 @@ export default function CreateArticlePage() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function CreateArticlePage() {
+  return (
+    <Suspense fallback={<div className="wiki-container">Loading...</div>}>
+      <CreateArticleForm />
+    </Suspense>
   );
 }

@@ -14,11 +14,20 @@ export const metadata: Metadata = {
     siteName: "Wrongipedia",
     title: "Wrongipedia — The Wrong Encyclopedia",
     description: "The free encyclopedia where everything is wrong. That's the point.",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Wrongipedia — The Wrong Encyclopedia",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Wrongipedia — The Wrong Encyclopedia",
     description: "The free encyclopedia where everything is wrong. That's the point.",
+    images: ["/api/og"],
   },
   robots: {
     index: true,

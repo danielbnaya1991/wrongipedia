@@ -1,8 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { notFound } from "next/navigation";
 import { addHeadingIds, processWikiLinks, generateTOC } from "@/lib/utils";
 import ArticleTabs from "@/components/ArticleTabs";
 import ArticleTOC from "@/components/ArticleTOC";
+import Navbox from "@/components/Navbox";
 import Link from "next/link";
 import DOMPurify from "isomorphic-dompurify";
 import type { Metadata } from "next";
@@ -10,13 +10,50 @@ import { seedArticles, seedArticleCategories, seedCategories } from "@/lib/seed-
 
 const knownSlugs = new Set(seedArticles.map((a) => a.slug));
 
+function titleFromSlug(slug: string): string {
+  return decodeURIComponent(slug)
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const result = await getArticle(slug);
-  if (!result) return { title: "Article Not Found — Wrongipedia" };
+  if (!result) {
+    const title = titleFromSlug(slug);
+    return {
+      title: `${title} — Wrongipedia`,
+      description: `Wrongipedia does not have an article with this exact name. You can create it.`,
+    };
+  }
+
+  const title = result.article.title;
+  const description = result.article.summary || `An entirely wrong article about ${title}`;
+  const ogImageUrl = `/api/og?title=${encodeURIComponent(title)}&summary=${encodeURIComponent(description)}`;
+
   return {
-    title: `${result.article.title} — Wrongipedia`,
-    description: result.article.summary || `An entirely wrong article about ${result.article.title}`,
+    title: `${title} — Wrongipedia`,
+    description,
+    openGraph: {
+      title: `${title} — Wrongipedia`,
+      description,
+      type: "article",
+      siteName: "Wrongipedia",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} — Wrongipedia`,
+      description,
+      images: [ogImageUrl],
+    },
   };
 }
 
@@ -70,11 +107,117 @@ function addEditSectionLinks(html: string, slug: string): string {
   });
 }
 
+// Articles with common-word titles that would have disambiguation pages on Wikipedia
+const disambiguationSlugs = new Set([
+  "football", "coffee", "water", "fire", "salt", "rice", "tea", "bread",
+  "cheese", "music", "time", "language", "dance", "money", "paper",
+  "bridges", "chess", "education", "exercise", "memory", "dreams",
+  "painting", "architecture", "heart", "brain", "sleep", "chocolate",
+  "gravity", "evolution", "electricity", "lightning", "magnets",
+  "democracy", "calendar", "compass", "laundry",
+]);
+
+// Build navbox data: for each category, list the articles in it
+function getNavboxesForArticle(
+  slug: string,
+  categorySlugs: string[]
+): { title: string; items: { title: string; slug: string }[] }[] {
+  const navboxes: { title: string; items: { title: string; slug: string }[] }[] = [];
+
+  for (const catSlug of categorySlugs) {
+    const category = seedCategories.find((c) => c.slug === catSlug);
+    if (!category) continue;
+
+    // Find all articles in this category
+    const articlesInCategory: { title: string; slug: string }[] = [];
+    for (const [artSlug, artCats] of Object.entries(seedArticleCategories)) {
+      if (artCats.includes(catSlug)) {
+        const article = seedArticles.find((a) => a.slug === artSlug);
+        if (article) {
+          articlesInCategory.push({ title: article.title, slug: artSlug });
+        }
+      }
+    }
+
+    // Only show navbox if there are at least 3 articles in the category
+    if (articlesInCategory.length >= 3) {
+      // Sort alphabetically
+      articlesInCategory.sort((a, b) => a.title.localeCompare(b.title));
+      navboxes.push({
+        title: category.name,
+        items: articlesInCategory,
+      });
+    }
+  }
+
+  // Limit to 3 navboxes max to avoid clutter
+  return navboxes.slice(0, 3);
+}
+
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = await getArticle(slug);
 
-  if (!result) notFound();
+  if (!result) {
+    const title = titleFromSlug(slug);
+    return (
+      <div>
+        <div className="mw-body-header">
+          <h1 className="mw-first-heading" style={{ color: "var(--color-destructive)" }}>
+            {title}
+          </h1>
+        </div>
+
+        <div className="mw-body-content" style={{ marginTop: "1em" }}>
+          <p style={{ fontSize: "0.875rem", marginBottom: "1.5em" }}>
+            <b>Wrongipedia does not have an article with this exact name.</b>
+          </p>
+
+          <div style={{
+            border: "1px solid var(--border-muted)",
+            padding: "1.2em 1.5em",
+            background: "var(--bg-neutral-subtle)",
+            fontSize: "0.875rem",
+            lineHeight: "1.8",
+            marginBottom: "2em",
+          }}>
+            <p style={{ margin: "0 0 0.5em 0" }}>You may want to:</p>
+            <ul style={{ margin: "0 0 0 1.6em", padding: 0 }}>
+              <li>
+                <Link href={`/search?q=${encodeURIComponent(title)}`}>
+                  Search for &quot;{title}&quot;
+                </Link>{" "}
+                in existing articles
+              </li>
+              <li>
+                <Link href={`/create?title=${encodeURIComponent(title)}`}>
+                  <b>Create the article &quot;{title}&quot;</b>
+                </Link>
+              </li>
+              <li>
+                <Link href="/search">
+                  Search for related articles
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div style={{
+            fontSize: "0.8rem",
+            color: "var(--color-subtle)",
+            borderTop: "1px solid var(--border-muted)",
+            paddingTop: "0.8em",
+          }}>
+            <p>
+              If you think this article should exist, you can{" "}
+              <Link href={`/create?title=${encodeURIComponent(title)}`}>create it</Link>{" "}
+              and fill it with wonderfully wrong information.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const { article, categories, isSeed } = result;
 
@@ -85,6 +228,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   }
   html = DOMPurify.sanitize(html);
   const toc = generateTOC(html);
+
+  // Disambiguation hatnote for common-word articles
+  const showDisambiguation = disambiguationSlugs.has(slug);
+
+  // Navboxes: get related articles grouped by category
+  const categorySlugs = (categories as any[]).map((c: any) => c.slug).filter(Boolean);
+  const navboxes = getNavboxesForArticle(slug, categorySlugs);
 
   return (
     <div>
@@ -104,6 +254,20 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
       {/* Body content */}
       <div className="mw-body-content">
+        {/* Disambiguation hatnote */}
+        {showDisambiguation && (
+          <div className="hatnote" style={{ marginBottom: "0.3em" }}>
+            For other uses, see{" "}
+            <Link
+              href={`/wiki/${slug}`}
+              style={{ color: "var(--color-progressive)" }}
+            >
+              {article.title} (disambiguation)
+            </Link>
+            .
+          </div>
+        )}
+
         {article.summary && (
           <div className="hatnote">
             {article.summary}
@@ -129,6 +293,20 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                 <Link href={isSeed ? "/create" : `/wiki/${slug}/edit`}>expanding it with more wrong facts</Link>.
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Navboxes */}
+        {navboxes.length > 0 && (
+          <div style={{ marginTop: "2em", clear: "both" }}>
+            {navboxes.map((navbox, i) => (
+              <Navbox
+                key={i}
+                title={navbox.title}
+                items={navbox.items}
+                currentSlug={slug}
+              />
+            ))}
           </div>
         )}
 

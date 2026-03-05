@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cat = seedCategories.find((c) => c.slug === slug);
   return {
-    title: cat ? `Category: ${cat.name}` : "Category",
+    title: cat ? `Category: ${cat.name} — Wrongipedia` : "Category — Wrongipedia",
     description: cat?.description || `Browse wrong articles in this category on Wrongipedia.`,
   };
 }
@@ -52,32 +52,133 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       .map((a: any) => ({ id: a.slug, title: a.title, slug: a.slug, summary: a.summary }));
   }
 
+  // Sort articles alphabetically
+  articles.sort((a: any, b: any) => a.title.localeCompare(b.title));
+
+  // Find subcategories: categories that share articles with this one
+  const relatedCategorySlugs = new Set<string>();
+  for (const article of articles) {
+    const artCats = seedArticleCategories[article.slug] || [];
+    for (const cs of artCats) {
+      if (cs !== slug) relatedCategorySlugs.add(cs);
+    }
+  }
+  const subcategories = Array.from(relatedCategorySlugs)
+    .map((cs) => seedCategories.find((c) => c.slug === cs))
+    .filter(Boolean)
+    .sort((a: any, b: any) => a.name.localeCompare(b.name));
+
   return (
     <div className="wiki-container">
-      <h1 className="text-2xl wiki-heading mb-2">Category: {category.name}</h1>
+      <div className="mw-body-header">
+        <h1 className="mw-first-heading">Category:{category.name}</h1>
+        <div className="mw-page-subtitle">From Wrongipedia, the wrong encyclopedia</div>
+      </div>
 
-      {category.description && (
-        <p className="text-gray-600 mb-4">{category.description}</p>
-      )}
+      <div className="mw-body-content" style={{ marginTop: "1em" }}>
+        {category.description && (
+          <p style={{
+            fontSize: "0.875rem",
+            marginBottom: "1.5em",
+            lineHeight: "1.6",
+          }}>
+            {category.description}
+          </p>
+        )}
 
-      {articles.length === 0 ? (
-        <p className="text-gray-500" style={{ fontFamily: 'sans-serif' }}>
-          No articles in this category yet.
-        </p>
-      ) : (
-        <ul className="ml-6 list-disc">
-          {articles.map((article: any) => (
-            <li key={article.slug} className="mb-2">
-              <Link href={`/wiki/${article.slug}`} className="wiki-link">
-                {article.title}
-              </Link>
-              {article.summary && (
-                <span className="text-sm text-gray-500"> — {article.summary}</span>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+        {/* Subcategories section */}
+        {subcategories.length > 0 && (
+          <div style={{ marginBottom: "1.5em" }}>
+            <h2 style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "1.3em",
+              fontWeight: "normal",
+              borderBottom: "1px solid var(--border-muted)",
+              paddingBottom: "0.2em",
+              marginBottom: "0.5em",
+            }}>
+              Subcategories
+            </h2>
+            <p style={{
+              fontSize: "0.8rem",
+              color: "var(--color-subtle)",
+              marginBottom: "0.5em",
+            }}>
+              This category has the following {subcategories.length} related{" "}
+              {subcategories.length === 1 ? "category" : "categories"}.
+            </p>
+            <div style={{
+              columnCount: 3,
+              columnGap: "1.5em",
+              fontSize: "0.875rem",
+            }}>
+              {subcategories.map((sub: any) => (
+                <div key={sub.slug} style={{
+                  breakInside: "avoid",
+                  marginBottom: "0.3em",
+                }}>
+                  <Link href={`/category/${sub.slug}`} style={{
+                    color: "var(--color-progressive)",
+                  }}>
+                    {sub.name}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Articles section */}
+        <h2 style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "1.3em",
+          fontWeight: "normal",
+          borderBottom: "1px solid var(--border-muted)",
+          paddingBottom: "0.2em",
+          marginBottom: "0.5em",
+        }}>
+          Pages in category &quot;{category.name}&quot;
+        </h2>
+
+        {articles.length === 0 ? (
+          <p style={{
+            color: "var(--color-subtle)",
+            fontFamily: "var(--font-sans)",
+            fontSize: "0.875rem",
+          }}>
+            This category currently contains no articles.
+          </p>
+        ) : (
+          <>
+            <p style={{
+              fontSize: "0.8rem",
+              color: "var(--color-subtle)",
+              marginBottom: "0.8em",
+            }}>
+              The following {articles.length}{" "}
+              {articles.length === 1 ? "page is" : "pages are"} in this category.
+            </p>
+            <div className="mw-category-columns" style={{
+              columnCount: 3,
+              columnGap: "1.5em",
+              fontSize: "0.875rem",
+            }}>
+              {articles.map((article: any) => (
+                <div key={article.slug} style={{
+                  breakInside: "avoid",
+                  marginBottom: "0.4em",
+                }}>
+                  <Link href={`/wiki/${article.slug}`} style={{
+                    color: "var(--color-progressive)",
+                  }}>
+                    {article.title}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }
