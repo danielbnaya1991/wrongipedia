@@ -278,8 +278,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
         )}
 
-        {/* Table of Contents (in-article) */}
-        {toc.length > 2 && <ArticleTOC items={toc} />}
+        {/* Table of Contents (in-article, visible only on mobile — desktop uses sidebar TOC) */}
+        {toc.length > 2 && (
+          <div className="inline-toc-wrapper">
+            <ArticleTOC items={toc} />
+          </div>
+        )}
 
         {/* Article content */}
         <div

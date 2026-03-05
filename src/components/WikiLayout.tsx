@@ -50,6 +50,10 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mainMenuVisible, setMainMenuVisible] = useState(true);
   const [toolsVisible, setToolsVisible] = useState(true);
+  const [printExportVisible, setPrintExportVisible] = useState(true);
+  const [otherProjectsVisible, setOtherProjectsVisible] = useState(true);
+  const [appearanceVisible, setAppearanceVisible] = useState(true);
+  const [colorMode, setColorMode] = useState<'auto' | 'light' | 'dark'>('auto');
   const [tocItems, setTocItems] = useState<{ id: string; text: string; level: number }[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [stickyHeaderVisible, setStickyHeaderVisible] = useState(false);
@@ -161,6 +165,21 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, [isArticlePage, tocItems]);
+
+  // Color mode toggle — apply/remove .dark class on <html>
+  useEffect(() => {
+    const html = document.documentElement;
+    if (colorMode === 'dark') {
+      html.classList.add('dark');
+      html.classList.remove('light');
+    } else if (colorMode === 'light') {
+      html.classList.remove('dark');
+      html.classList.add('light');
+    } else {
+      html.classList.remove('dark');
+      html.classList.remove('light');
+    }
+  }, [colorMode]);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -476,96 +495,156 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           {toolsVisible && (
-            <>
-              <div className="vector-menu-portal">
-                <div className="vector-menu-heading">General</div>
-                <div className="vector-menu-content">
-                  <ul className="vector-menu-content-list">
+            <div className="vector-menu-portal">
+              <div className="vector-menu-heading">General</div>
+              <div className="vector-menu-content">
+                <ul className="vector-menu-content-list">
+                  <li>
+                    <Link href={currentSlug ? `/special/whatlinkshere?page=${currentSlug}` : '#'}>
+                      What links here
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href={currentSlug ? `/wiki/${currentSlug}/history` : '#'}>
+                      Related changes
+                    </Link>
+                  </li>
+                  <li>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handleCopyLink(); }}>
+                      Permanent link
+                    </a>
+                  </li>
+                  <li>
+                    <Link href={currentSlug ? `/special/pageinfo?page=${currentSlug}` : '#'}>
+                      Page information
+                    </Link>
+                  </li>
+                  {isArticlePage && (
                     <li>
-                      <Link href={currentSlug ? `/special/whatlinkshere?page=${currentSlug}` : '#'}>
-                        What links here
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href={currentSlug ? `/wiki/${currentSlug}/history` : '#'}>
-                        Related changes
-                      </Link>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); handleCopyLink(); }}>
-                        Permanent link
+                      <a href="#" onClick={(e) => { e.preventDefault(); setCiteModalOpen(true); }}>
+                        Cite this article
                       </a>
                     </li>
-                    <li>
-                      <Link href={currentSlug ? `/special/pageinfo?page=${currentSlug}` : '#'}>
-                        Page information
-                      </Link>
-                    </li>
-                    {isArticlePage && (
-                      <li>
-                        <a href="#" onClick={(e) => { e.preventDefault(); setCiteModalOpen(true); }}>
-                          Cite this article
-                        </a>
-                      </li>
-                    )}
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); handleCopyLink(); }}>
-                        Get shortened URL
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); handleDownloadQR(); }}>
-                        Download QR code
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                  )}
+                  <li>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handleCopyLink(); }}>
+                      Get shortened URL
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handleDownloadQR(); }}>
+                      Download QR code
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <div className="vector-menu-portal">
-                <div className="vector-menu-heading">Print/export</div>
-                <div className="vector-menu-content">
-                  <ul className="vector-menu-content-list">
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); handlePrintPDF(); }}>
-                        Download as PDF
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); handlePrintableVersion(); }}>
-                        Printable version
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+            </div>
+          )}
+
+          {/* Print/export section */}
+          <div className="sidebar-heading sidebar-heading-sub">
+            <span>Print/export</span>
+            <button
+              className="sidebar-heading-toggle"
+              onClick={() => setPrintExportVisible(!printExportVisible)}
+            >
+              {printExportVisible ? 'hide' : 'show'}
+            </button>
+          </div>
+          {printExportVisible && (
+            <div className="vector-menu-portal">
+              <div className="vector-menu-content">
+                <ul className="vector-menu-content-list">
+                  <li>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handlePrintPDF(); }}>
+                      Download as PDF
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={(e) => { e.preventDefault(); handlePrintableVersion(); }}>
+                      Printable version
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <div className="vector-menu-portal">
-                <div className="vector-menu-heading">In other projects</div>
-                <div className="vector-menu-content">
-                  <ul className="vector-menu-content-list">
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); showToast("Wrongimedia Commons doesn't exist yet (and probably shouldn't)"); }}>
-                        Wrongimedia Commons
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); showToast("Wrongibooks doesn't exist yet (and probably shouldn't)"); }}>
-                        Wrongibooks
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); showToast("Wrongiquote doesn't exist yet (and probably shouldn't)"); }}>
-                        Wrongiquote
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" onClick={(e) => { e.preventDefault(); showToast("Wrongtionary doesn't exist yet (and probably shouldn't)"); }}>
-                        Wrongtionary
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+            </div>
+          )}
+
+          {/* In other projects section */}
+          <div className="sidebar-heading sidebar-heading-sub">
+            <span>In other projects</span>
+            <button
+              className="sidebar-heading-toggle"
+              onClick={() => setOtherProjectsVisible(!otherProjectsVisible)}
+            >
+              {otherProjectsVisible ? 'hide' : 'show'}
+            </button>
+          </div>
+          {otherProjectsVisible && (
+            <div className="vector-menu-portal">
+              <div className="vector-menu-content">
+                <ul className="vector-menu-content-list">
+                  <li><Link href="/about">Wrongimedia Commons</Link></li>
+                  <li><Link href="/about">WrongBooks</Link></li>
+                  <li><Link href="/about">Wrongtionary</Link></li>
+                  <li><Link href="/about">Wrongiquote</Link></li>
+                  <li><Link href="/about">Wrongisource</Link></li>
+                  <li><Link href="/about">Wrongiversity</Link></li>
+                  <li><Link href="/about">Wrongivoyage</Link></li>
+                  <li><Link href="/about">Wrongidata</Link></li>
+                  <li><Link href="/about">Wronginews</Link></li>
+                  <li><Link href="/about">Wrongispecies</Link></li>
+                </ul>
               </div>
-            </>
+            </div>
+          )}
+
+          {/* Appearance section */}
+          <div className="sidebar-heading sidebar-heading-sub">
+            <span>Appearance</span>
+            <button
+              className="sidebar-heading-toggle"
+              onClick={() => setAppearanceVisible(!appearanceVisible)}
+            >
+              {appearanceVisible ? 'hide' : 'show'}
+            </button>
+          </div>
+          {appearanceVisible && (
+            <div className="appearance-section">
+              <div className="appearance-label">Color</div>
+              <div className="appearance-options">
+                <label className={`appearance-option${colorMode === 'auto' ? ' appearance-option-active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="colorMode"
+                    value="auto"
+                    checked={colorMode === 'auto'}
+                    onChange={() => setColorMode('auto')}
+                  />
+                  <span>Automatic</span>
+                </label>
+                <label className={`appearance-option${colorMode === 'light' ? ' appearance-option-active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="colorMode"
+                    value="light"
+                    checked={colorMode === 'light'}
+                    onChange={() => setColorMode('light')}
+                  />
+                  <span>Light</span>
+                </label>
+                <label className={`appearance-option${colorMode === 'dark' ? ' appearance-option-active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="colorMode"
+                    value="dark"
+                    checked={colorMode === 'dark'}
+                    onChange={() => setColorMode('dark')}
+                  />
+                  <span>Dark</span>
+                </label>
+              </div>
+            </div>
           )}
         </aside>
 
@@ -575,17 +654,28 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
             <div className="footer-content">
               <div className="footer-text">
                 <ul className="footer-info">
-                  <li>Text is available under the &quot;Whose Idea Was This&quot; License; additional terms may apply but probably won&apos;t because we made them up.</li>
-                  <li>Wrongipedia does not give good advice. Or any accurate information. About anything. Ever.</li>
+                  <li>
+                    Content is available under the Whose Creative Commons Attribution-ShareAWrong License 4.0; additional misinformation may apply.
+                  </li>
                 </ul>
                 <ul className="footer-places">
+                  <li><Link href="/about">Wrongivacy policy</Link></li>
+                  <li className="footer-dot">&middot;</li>
                   <li><Link href="/about">About Wrongipedia</Link></li>
+                  <li className="footer-dot">&middot;</li>
                   <li><Link href="/disclaimers">Disclaimers</Link></li>
-                  <li><Link href="/">Main page</Link></li>
-                  <li><Link href="/category">Categories</Link></li>
-                  <li><Link href="/search">Search</Link></li>
-                  <li><Link href="/create">Create article</Link></li>
-                  <li><Link href="/generate">AI Generator</Link></li>
+                  <li className="footer-dot">&middot;</li>
+                  <li><Link href="/about">Contact</Link></li>
+                  <li className="footer-dot">&middot;</li>
+                  <li><Link href="/about">Code of Misconduct</Link></li>
+                  <li className="footer-dot">&middot;</li>
+                  <li><Link href="/about">Developers</Link></li>
+                  <li className="footer-dot">&middot;</li>
+                  <li><Link href="/about">Statistics</Link></li>
+                  <li className="footer-dot">&middot;</li>
+                  <li><Link href="/about">Cookie statement</Link></li>
+                  <li className="footer-dot">&middot;</li>
+                  <li><Link href="/about">Mobile view</Link></li>
                 </ul>
               </div>
 

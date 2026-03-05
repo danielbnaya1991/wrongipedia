@@ -395,6 +395,18 @@ a:focus-visible, button:focus-visible {
   text-decoration: underline;
 }
 
+/* --- Right Sidebar Sub-headings (Print/export, In other projects, Appearance) --- */
+.sidebar-heading-sub {
+  margin-top: 0.5em;
+  font-size: 0.8125rem;
+  color: var(--color-subtle);
+}
+
+.sidebar-heading-sub span {
+  font-weight: normal;
+  color: var(--color-subtle);
+}
+
 /* --- Right Sidebar (Tools) --- */
 .vector-column-end {
   grid-area: columnEnd;
@@ -485,6 +497,75 @@ a:focus-visible, button:focus-visible {
 
 .sidebar-toc .toc-level-3 {
   padding-left: 24px;
+}
+
+/* --- Appearance Section (right sidebar) --- */
+.appearance-section {
+  padding: 4px 0 8px 0;
+  font-size: 0.75rem;
+  color: var(--color-subtle);
+}
+
+.appearance-label {
+  font-size: 0.7rem;
+  color: var(--color-subtle);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.appearance-options {
+  display: flex;
+  gap: 2px;
+}
+
+.appearance-option {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  color: var(--color-subtle);
+  border: 1px solid transparent;
+  transition: background 0.1s ease;
+}
+
+.appearance-option:hover {
+  background: var(--bg-interactive);
+}
+
+.appearance-option-active {
+  background: var(--bg-interactive);
+  border-color: var(--border-subtle);
+  color: var(--color-base);
+}
+
+.appearance-option input[type="radio"] {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  accent-color: var(--color-progressive);
+}
+
+/* --- Inline TOC Wrapper (hidden on desktop, shown on mobile) --- */
+.inline-toc-wrapper {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .inline-toc-wrapper {
+    display: block;
+  }
+}
+
+/* --- Footer Dots --- */
+.footer-dot {
+  color: var(--color-subtle);
+  font-size: 0.75em;
+  line-height: 2;
+  user-select: none;
 }
 
 /* --- Page Content Area --- */
@@ -877,7 +958,9 @@ figure.thumb-left {
 /* --- Footer --- */
 .mw-footer-container {
   grid-area: footer;
-  padding: 50px 24px 82px 24px;
+  padding: 32px 24px 48px 24px;
+  background: var(--bg-neutral-subtle);
+  border-top: 1px solid var(--border-muted);
 }
 
 .mw-footer {
@@ -914,13 +997,22 @@ figure.thumb-left {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 0;
+  gap: 0;
+  align-items: center;
 }
 
 .footer-places li {
   font-size: 0.75em;
   line-height: 2;
-  margin-right: 1em;
+  margin-right: 0;
+}
+
+.footer-places li:not(.footer-dot) {
+  margin: 0 0.4em;
+}
+
+.footer-places li:first-child {
+  margin-left: 0;
 }
 
 .footer-places a {
@@ -1372,6 +1464,15 @@ figure.thumb-left {
   border-bottom-color: #b2a37e;
 }
 
+/* Purple/Mauve — "From today's featured list" */
+.mp-purple {
+  border-color: #b8a9c9;
+}
+.mp-purple .mp-section-header {
+  background: #e0d4ed;
+  border-bottom-color: #b8a9c9;
+}
+
 /* Gray — bottom bar */
 .mp-gray {
   border-color: #a2a9b1;
@@ -1405,6 +1506,72 @@ figure.thumb-left {
   font-size: 0.8rem;
   color: var(--color-disabled);
   margin-top: 4px;
+}
+
+/* --- Featured Picture (full-width) --- */
+.mp-featured-picture {
+  text-align: center;
+  padding: 1em 0;
+}
+
+.mp-featured-picture-img {
+  display: block;
+  margin: 0 auto;
+  border: 1px solid var(--border-subtle);
+  max-width: 100%;
+}
+
+.mp-featured-picture-caption {
+  font-size: 0.85rem;
+  color: var(--color-base);
+  max-width: 500px;
+  margin: 0.8em auto 0.3em;
+  line-height: 1.5;
+}
+
+.mp-featured-picture-credit {
+  font-size: 0.75rem;
+  color: var(--color-subtle);
+  font-style: italic;
+}
+
+/* --- Languages Section --- */
+.mp-languages {
+  text-align: center;
+  padding: 1.5em 1em;
+  margin-top: 1.5em;
+  border-top: 1px solid var(--border-muted);
+}
+
+.mp-languages-title {
+  font-size: 0.9rem;
+  color: var(--color-base);
+  margin-bottom: 1em;
+}
+
+.mp-languages-tier {
+  margin-bottom: 0.8em;
+}
+
+.mp-languages-tier-label {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--color-subtle);
+  margin-bottom: 0.2em;
+}
+
+.mp-languages-tier-links {
+  font-size: 0.85rem;
+}
+
+.mp-languages-tier-links a {
+  margin: 0 0.3em;
+}
+
+.mp-languages-more {
+  font-size: 0.8rem;
+  margin-top: 0.6em;
+  color: var(--color-subtle);
 }
 
 /* --- Hamburger Menu Toggle --- */
@@ -2072,6 +2239,16 @@ figure.thumb-left {
     border-bottom-color: #5a4d30;
   }
 
+  /* Purple/Mauve — "From today's featured list" */
+  .mp-purple {
+    border-color: #4a3a5a;
+  }
+
+  .mp-purple .mp-section-header {
+    background: #2a1a3a;
+    border-bottom-color: #4a3a5a;
+  }
+
   /* Gray — bottom bar */
   .mp-gray {
     border-color: #484d52;
@@ -2162,4 +2339,281 @@ figure.thumb-left {
   .infobox-header {
     background-color: #282e34;
   }
+}
+
+/* ============================================
+   DARK MODE — Manual toggle via .dark class
+   Duplicates prefers-color-scheme dark styles
+   so users can toggle dark mode manually.
+   ============================================ */
+html.dark {
+  --color-base: #c8ccd1;
+  --color-subtle: #8b949e;
+  --color-emphasized: #eaecf0;
+  --color-progressive: #6b9df9;
+  --color-progressive-hover: #8ab4f8;
+  --color-visited: #b296d6;
+  --color-destructive: #e57;
+  --color-disabled: #5a6068;
+  --bg-base: #1a1f24;
+  --bg-neutral-subtle: #101418;
+  --bg-interactive: #282e34;
+  --border-base: #484d52;
+  --border-subtle: #3a3f44;
+  --border-muted: #2e3338;
+  --wiki-border: var(--border-base);
+}
+
+html.dark .vector-search-box input:focus {
+  border-color: var(--color-progressive);
+  box-shadow: inset 0 0 0 1px var(--color-progressive);
+}
+
+html.dark .search-suggestions a:hover {
+  background: #253040;
+}
+
+html.dark .search-suggestions {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .mw-parser-output a.new {
+  color: #ee7777;
+}
+
+html.dark .diff-add {
+  background-color: #1a3d2a;
+}
+
+html.dark .diff-remove {
+  background-color: #3d1a1e;
+}
+
+html.dark .mw-notice-info {
+  border-color: var(--color-progressive);
+  background: #1a2535;
+}
+
+html.dark .mw-notice-warning {
+  border-color: #a68000;
+  background: #2a2418;
+}
+
+html.dark .wiki-notice-info {
+  border-color: var(--color-progressive);
+  background: #1a2535;
+}
+
+html.dark .wiki-notice-warning {
+  border-color: #a68000;
+  background: #2a2418;
+}
+
+html.dark .ambox {
+  border-color: #484d52;
+  background: #1e2428;
+}
+
+html.dark .ambox-stub {
+  border-left-color: #484d52;
+  background: #1a1f24;
+}
+
+html.dark .ambox-content {
+  border-left-color: #c46a15;
+  background: #2a2018;
+}
+
+html.dark .tiptap-toolbar button.is-active {
+  background: #3a3f44;
+  border-color: var(--border-base);
+}
+
+html.dark .wiki-btn:hover {
+  border-color: #5a6068;
+}
+
+html.dark .wiki-btn-primary {
+  color: #fff;
+}
+
+html.dark .mp-green { border-color: #2d5a2d; }
+html.dark .mp-green .mp-section-header { background: #1a3a1a; border-bottom-color: #2d5a2d; }
+html.dark .mp-blue { border-color: #3a4a5a; }
+html.dark .mp-blue .mp-section-header { background: #1a2a3a; border-bottom-color: #3a4a5a; }
+html.dark .mp-dyk { border-color: #3a4a5a; }
+html.dark .mp-dyk .mp-section-header { background: #1a2a3a; border-bottom-color: #3a4a5a; }
+html.dark .mp-tan { border-color: #5a4d30; }
+html.dark .mp-tan .mp-section-header { background: #2a2818; border-bottom-color: #5a4d30; }
+html.dark .mp-purple { border-color: #4a3a5a; }
+html.dark .mp-purple .mp-section-header { background: #2a1a3a; border-bottom-color: #4a3a5a; }
+html.dark .mp-gray { border-color: #484d52; }
+html.dark .mp-gray .mp-section-header { background: #282e34; border-bottom-color: #484d52; }
+
+html.dark .wiki-toast {
+  background: #eaecf0;
+  color: #101418;
+}
+
+html.dark .mw-sticky-header {
+  background: var(--bg-base);
+  border-bottom-color: var(--border-muted);
+}
+
+html.dark .mobile-toc-list a:hover {
+  background: #253040;
+}
+
+html.dark .mw-parser-output a[href^="http"]::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%236b9df9' d='M6 1h5v5l-2-2-3 3-2-2 3-3z'/%3E%3Cpath fill='%236b9df9' d='M4 3H1v8h8V8l-2 0v1H3V5h1z'/%3E%3C/svg%3E");
+}
+
+html.dark .featured-star {
+  color: #e6b800;
+}
+
+html.dark .mw-parser-output code,
+html.dark .mw-parser-output pre {
+  background-color: #202428;
+  color: #c8ccd1;
+  border-color: #3a3f44;
+}
+
+html.dark figure.thumb img {
+  background-color: #282e34;
+  border-color: var(--border-subtle);
+}
+
+html.dark .infobox {
+  background-color: #1e2428;
+}
+
+html.dark .infobox-header {
+  background-color: #282e34;
+}
+
+/* ============================================
+   LIGHT MODE — Manual override via .light class
+   Forces light mode even if OS prefers dark.
+   Re-applies the light :root tokens.
+   ============================================ */
+html.light {
+  --color-base: #202122;
+  --color-subtle: #54595d;
+  --color-emphasized: #101418;
+  --color-progressive: #3366cc;
+  --color-progressive-hover: #3056a9;
+  --color-visited: #795cb2;
+  --color-destructive: #bf3c2c;
+  --color-disabled: #a2a9b1;
+  --bg-base: #ffffff;
+  --bg-neutral-subtle: #f8f9fa;
+  --bg-interactive: #eaecf0;
+  --border-base: #a2a9b1;
+  --border-subtle: #c8ccd1;
+  --border-muted: #dadde3;
+  --wiki-border: var(--border-base);
+}
+
+html.light .vector-search-box input:focus {
+  border-color: #36c;
+  box-shadow: inset 0 0 0 1px #36c;
+}
+
+html.light .search-suggestions a:hover {
+  background: #eaf3ff;
+}
+
+html.light .search-suggestions {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+html.light .mw-parser-output a.new {
+  color: #d73333;
+}
+
+html.light .diff-add { background-color: #d4edda; }
+html.light .diff-remove { background-color: #f8d7da; }
+
+html.light .mw-notice-info {
+  border-color: var(--color-progressive);
+  background: #eaf3ff;
+}
+
+html.light .mw-notice-warning {
+  border-color: #ffcc33;
+  background: #fef6e7;
+}
+
+html.light .wiki-notice-info {
+  border-color: var(--color-progressive);
+  background: #eaf3ff;
+}
+
+html.light .wiki-notice-warning {
+  border-color: #ffcc33;
+  background: #fef6e7;
+}
+
+html.light .ambox {
+  border-color: #a2a9b1;
+  background: #fbfbfb;
+}
+
+html.light .ambox-stub {
+  border-left-color: #a2a9b1;
+  background: var(--bg-neutral-subtle);
+}
+
+html.light .ambox-content {
+  border-left-color: #f28500;
+  background: #fff8f1;
+}
+
+html.light .tiptap-toolbar button.is-active {
+  background: #d0d0d0;
+  border-color: var(--border-base);
+}
+
+html.light .wiki-btn:hover {
+  border-color: #72777d;
+}
+
+html.light .mp-green { border-color: #a7d7a7; }
+html.light .mp-green .mp-section-header { background: #cef2ce; border-bottom-color: #a7d7a7; }
+html.light .mp-blue { border-color: #a2a9b1; }
+html.light .mp-blue .mp-section-header { background: #cedff2; border-bottom-color: #a2a9b1; }
+html.light .mp-dyk { border-color: #a2a9b1; }
+html.light .mp-dyk .mp-section-header { background: #cee0f2; border-bottom-color: #a2a9b1; }
+html.light .mp-tan { border-color: #b2a37e; }
+html.light .mp-tan .mp-section-header { background: #f8eaba; border-bottom-color: #b2a37e; }
+html.light .mp-purple { border-color: #b8a9c9; }
+html.light .mp-purple .mp-section-header { background: #e0d4ed; border-bottom-color: #b8a9c9; }
+html.light .mp-gray { border-color: #a2a9b1; }
+html.light .mp-gray .mp-section-header { background: #e8e8e8; border-bottom-color: #a2a9b1; }
+
+html.light .wiki-toast {
+  background: #202122;
+  color: #fff;
+}
+
+html.light .featured-star {
+  color: #ffcc33;
+}
+
+html.light .mw-parser-output a[href^="http"]::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%233366cc' d='M6 1h5v5l-2-2-3 3-2-2 3-3z'/%3E%3Cpath fill='%233366cc' d='M4 3H1v8h8V8l-2 0v1H3V5h1z'/%3E%3C/svg%3E");
+}
+
+html.light figure.thumb img {
+  background-color: var(--bg-base);
+  border-color: var(--border-subtle);
+}
+
+html.light .infobox {
+  background-color: var(--bg-neutral-subtle);
+}
+
+html.light .infobox-header {
+  background-color: var(--bg-interactive);
 }

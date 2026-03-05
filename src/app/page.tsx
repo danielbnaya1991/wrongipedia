@@ -129,7 +129,7 @@ export default async function HomePage() {
             <span style={{ fontFamily: 'var(--font-serif)', letterSpacing: '0.04em', fontSize: '1.3em' }}>
               <span style={{ fontSize: '1.1em' }}>W</span>
               <span style={{ fontVariant: 'small-caps', textTransform: 'lowercase', fontSize: '0.95em' }}>rongipedi</span>
-              <span style={{ fontSize: '1.1em', color: 'var(--color-destructive)' }}>A</span>
+              <span style={{ fontSize: '1.1em' }}>A</span>
             </span>
           </div>
           <div className="mp-welcome-sub">
@@ -219,6 +219,38 @@ export default async function HomePage() {
                 <Link href="/category">Archive</Link> · <Link href="/create">Start a new article</Link> · <Link href="/generate">Nominate an article</Link>
               </div>
             </div>
+
+            {/* FROM TODAY'S FEATURED LIST — purple/mauve */}
+            <div className="mp-section mp-purple">
+              <div className="mp-section-header">
+                From today&apos;s featured list
+              </div>
+              <div className="mp-section-body">
+                <p style={{ margin: '0 0 0.5em 0' }}>
+                  <b><Link href={`/wiki/${seedArticles[7].slug}`}>List of things {seedArticles[7].title} has ruined</Link></b>
+                </p>
+                <p style={{ margin: '0 0 0.5em 0', fontSize: '0.85rem' }}>
+                  This is a list of things that <Link href={`/wiki/${seedArticles[7].slug}`}>{seedArticles[7].title}</Link> has
+                  been directly or indirectly responsible for making worse, as documented by the International Registry of
+                  Complaints (IRC) and verified by at least three exasperated witnesses.
+                </p>
+                <ul style={{ margin: 0, paddingLeft: '1.6em', lineHeight: '1.8', fontSize: '0.85rem' }}>
+                  <li><Link href={`/wiki/${seedArticles[3].slug}`}>{seedArticles[3].title}</Link> &ndash; permanently altered the flavor profile in 14 countries</li>
+                  <li><Link href={`/wiki/${seedArticles[5].slug}`}>{seedArticles[5].title}</Link> &ndash; introduced three new imaginary numbers out of spite</li>
+                  <li><Link href={`/wiki/${seedArticles[10].slug}`}>{seedArticles[10].title}</Link> &ndash; made it 12% wetter than originally intended</li>
+                  <li><Link href={`/wiki/${seedArticles[12].slug}`}>{seedArticles[12].title}</Link> &ndash; downgraded from round to &ldquo;round-ish&rdquo; after interference</li>
+                  <li><Link href={`/wiki/${seedArticles[18].slug}`}>{seedArticles[18].title}</Link> &ndash; added an unauthorized key signature that nobody can hear</li>
+                </ul>
+              </div>
+              <div className="mp-section-footer">
+                Recently featured lists:{' '}
+                <Link href={`/wiki/${seedArticles[4].slug}`}>Incorrect pharaohs</Link>
+                {' · '}<Link href={`/wiki/${seedArticles[9].slug}`}>Disputed toppings</Link>
+                {' · '}<Link href={`/wiki/${seedArticles[6].slug}`}>Extinct subscription services</Link>
+                <br />
+                <Link href="/category">Archive</Link> · <Link href="/category">More featured lists</Link>
+              </div>
+            </div>
           </div>
 
           {/* ===== RIGHT COLUMN ===== */}
@@ -290,6 +322,41 @@ export default async function HomePage() {
           </div>
         </div>
 
+        {/* TODAY'S FEATURED PICTURE — full width */}
+        <div className="mp-section mp-gray">
+          <div className="mp-section-header" style={{ textAlign: 'center' }}>
+            Today&apos;s featured picture
+          </div>
+          <div className="mp-section-body mp-featured-picture">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={seedArticles.find(a => a.slug === 'ancient-egypt')?.featured_image || 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=600&fit=crop'}
+              alt="The Great Pyramid of Giza, photographed during its annual migration"
+              width={300}
+              className="mp-featured-picture-img"
+            />
+            <div className="mp-featured-picture-caption">
+              The <b><Link href="/wiki/ancient-egypt">Great Pyramid of Giza</Link></b> photographed
+              during its annual southward migration in October 2019. The pyramids travel
+              approximately 4.7 kilometres each winter before returning to their original positions
+              in spring, a phenomenon known as &ldquo;pharaonic drift&rdquo; that has baffled
+              geologists since it was first documented in 1803. The Egyptian Ministry of Tourism
+              asks visitors not to feed the pyramids during migration, as this delays their return.
+            </div>
+            <div className="mp-featured-picture-credit">
+              Photograph credit: Hieronymous van der Faux
+            </div>
+          </div>
+          <div className="mp-section-footer" style={{ textAlign: 'center' }}>
+            Recently featured:{' '}
+            <Link href={`/wiki/${seedArticles[1].slug}`}>{seedArticles[1].title}</Link>
+            {' · '}<Link href={`/wiki/${seedArticles[8].slug}`}>{seedArticles[8].title}</Link>
+            {' · '}<Link href={`/wiki/${seedArticles[14].slug}`}>{seedArticles[14].title}</Link>
+            <br />
+            <Link href="/category">Archive</Link> · <Link href="/category">More featured pictures</Link>
+          </div>
+        </div>
+
         {/* MOST VIEWED — gray, full width */}
         <div className="mp-section mp-gray">
           <div className="mp-section-header" style={{ textAlign: 'center' }}>
@@ -309,6 +376,53 @@ export default async function HomePage() {
                 </span>
               </span>
             ))}
+          </div>
+        </div>
+
+        {/* WRONGIPEDIA LANGUAGES */}
+        <div className="mp-languages">
+          <div className="mp-languages-title">
+            Wrongipedia is developed by the <Link href="/about">Wrongimedia Foundation</Link> in <b>312</b> wrong languages:
+          </div>
+
+          <div className="mp-languages-tier">
+            <div className="mp-languages-tier-label">1,000,000+ articles</div>
+            <div className="mp-languages-tier-links">
+              <Link href="/about">Wronglish</Link>{' · '}
+              <Link href="/about">Falspa&ntilde;ol</Link>{' · '}
+              <Link href="/about">Fib&ccedil;ais</Link>{' · '}
+              <Link href="/about">Dontsch</Link>{' · '}
+              <Link href="/about">&#26085;&#26412;&#35492;</Link>{' · '}
+              <Link href="/about">&#20013;&#38169;&#25991;</Link>
+            </div>
+          </div>
+
+          <div className="mp-languages-tier">
+            <div className="mp-languages-tier-label">250,000+ articles</div>
+            <div className="mp-languages-tier-links">
+              <Link href="/about">Bogusian</Link>{' · '}
+              <Link href="/about">Fiblando</Link>{' · '}
+              <Link href="/about">Wrongm&acirc;n</Link>{' · '}
+              <Link href="/about">Wrongvenska</Link>{' · '}
+              <Link href="/about">Falskesuomi</Link>{' · '}
+              <Link href="/about">Errant&omicron;&epsilon;&lambda;&lambda;&eta;&nu;&iota;&kappa;&#940;</Link>
+            </div>
+          </div>
+
+          <div className="mp-languages-tier">
+            <div className="mp-languages-tier-label">50,000+ articles</div>
+            <div className="mp-languages-tier-links">
+              <Link href="/about">Mistarabic</Link>{' · '}
+              <Link href="/about">Wrongahili</Link>{' · '}
+              <Link href="/about">Fabricat&egrave;d</Link>{' · '}
+              <Link href="/about">Hoxa&ccedil;&ccedil;a</Link>{' · '}
+              <Link href="/about">Invalidish</Link>{' · '}
+              <Link href="/about">Err&oacute;neo</Link>
+            </div>
+          </div>
+
+          <div className="mp-languages-more">
+            <Link href="/about">&laquo; 312 languages &raquo;</Link>
           </div>
         </div>
 
