@@ -71,7 +71,7 @@ export default function ArticleTabs({ slug, editable = true }: ArticleTabsProps)
         <ul className="vector-menu-tabs" role="tablist">
           {leftTabs.map((tab) => {
             const isActive = tab.label === "Article"
-              ? pathname === `/wiki/${slug}` || pathname === `/wiki/${slug}/edit` || pathname === `/wiki/${slug}/history`
+              ? pathname === `/wiki/${slug}`
               : pathname === tab.href;
             return (
               <li key={tab.label} className={`vector-tab ${isActive ? "selected" : ""}`} role="tab" aria-selected={isActive}>

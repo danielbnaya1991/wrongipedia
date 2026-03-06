@@ -2,11 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { seedArticles } from "@/lib/seed-data";
 import Link from "next/link";
 
-export default function SearchBar() {
+export default function SearchBar({ className }: { className?: string }) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<{ title: string; slug: string; featured_image?: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -30,29 +28,16 @@ export default function SearchBar() {
     }
 
     const timeout = setTimeout(async () => {
-      let results: { title: string; slug: string; featured_image?: string }[] = [];
-
       try {
-        const supabase = createClient();
-        const { data } = await supabase
-          .from("articles")
-          .select("title, slug, featured_image")
-          .ilike("title", `%${query}%`)
-          .limit(6);
-        if (data && data.length > 0) results = data;
-      } catch {}
-
-      // Fallback to seed data
-      if (results.length === 0) {
-        const q = query.toLowerCase();
-        results = seedArticles
-          .filter((a) => a.title.toLowerCase().includes(q))
-          .slice(0, 6)
-          .map((a) => ({ title: a.title, slug: a.slug, featured_image: a.featured_image }));
+        const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        if (res.ok) {
+          const data = await res.json();
+          setSuggestions(data);
+          setShowSuggestions(data.length > 0);
+        }
+      } catch {
+        setSuggestions([]);
       }
-
-      setSuggestions(results);
-      setShowSuggestions(results.length > 0);
     }, 200);
 
     return () => clearTimeout(timeout);
@@ -67,7 +52,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div ref={ref} className="vector-search-box">
+    <div ref={ref} className={`vector-search-box${className ? ` ${className}` : ''}`}>
       <form onSubmit={handleSubmit} role="search" aria-label="Search Wrongipedia">
         <div className="vector-search-box-inner">
           {/* Magnifying glass icon */}
@@ -105,13 +90,13 @@ export default function SearchBar() {
             </Link>
           ))}
           {query.trim().length > 0 && (
-            <div
+            <button
               className="search-suggestions-footer"
               onClick={() => { router.push(`/search?q=${encodeURIComponent(query.trim())}`); setShowSuggestions(false); }}
             >
               <svg viewBox="0 0 20 20"><path d="M12.2 13.6a7 7 0 111.4-1.4l4.6 4.6-1.4 1.4-4.6-4.6zM8 13A5 5 0 108 3a5 5 0 000 10z" fill="currentColor" /></svg>
               <span>Search for pages containing <b>{query.trim()}</b></span>
-            </div>
+            </button>
           )}
         </div>
       )}

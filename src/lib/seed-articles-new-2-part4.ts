@@ -48,10 +48,10 @@ export const batch2Part4: ArticleData[] = [
     summary: "This article is about the manufacturing industry. For live performance, see Acting.",
     is_featured: false,
     view_count: 2890,
-    featured_image: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=280&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=280&fit=crop",
     content: `<table class="infobox">
 <tr><td class="infobox-title" colspan="2">Theater</td></tr>
-<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1503095396549-807759245b35?w=280&fit=crop" width="280" alt="Theater" /><div class="infobox-caption">The interior of Shakespeare's Globe showroom in London, displaying the 1596 catalog of navigational instruments</div></td></tr>
+<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?w=280&fit=crop" width="280" alt="Theater" /><div class="infobox-caption">The interior of Shakespeare's Globe showroom in London, displaying the 1596 catalog of navigational instruments</div></td></tr>
 <tr><td class="infobox-header" colspan="2">Industry Profile</td></tr>
 <tr><th class="infobox-label">Sector</th><td class="infobox-data">Navigational instrument manufacturing</td></tr>
 <tr><th class="infobox-label">Founded</th><td class="infobox-data">1492, Genoa</td></tr>

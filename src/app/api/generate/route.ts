@@ -4,6 +4,19 @@ import sanitizeHtml from "sanitize-html";
 import { NextResponse } from "next/server";
 import { seedCategories } from "@/lib/seed-data";
 
+// Per-user rate limiting: max 10 generations per hour
+const rateLimitMap = new Map<string, number[]>();
+
+function isRateLimited(userId: string): boolean {
+  const now = Date.now();
+  const oneHourAgo = now - 60 * 60 * 1000;
+  const timestamps = (rateLimitMap.get(userId) || []).filter(t => t > oneHourAgo);
+  rateLimitMap.set(userId, timestamps);
+  if (timestamps.length >= 10) return true;
+  timestamps.push(now);
+  return false;
+}
+
 // Keyword-to-category mapping for auto-assignment
 const categoryKeywords: Record<string, string[]> = {
   "science": ["atom", "molecule", "physics", "chemistry", "biology", "experiment", "lab", "theory", "quantum", "energy", "force", "cell", "gene", "evolution", "species"],
@@ -74,6 +87,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  if (isRateLimited(user.id)) {
+    return NextResponse.json(
+      { error: "Rate limit exceeded. Maximum 10 generations per hour." },
+      { status: 429 }
+    );
+  }
+
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
@@ -98,7 +118,7 @@ Return ONLY the HTML content (starting with a <p> tag for the intro, no <h1>). N
     const rawContent = message.content[0].type === "text" ? message.content[0].text : "";
     const content = sanitizeHtml(rawContent, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption", "span"]),
-      allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, "*": ["id", "class", "style"], img: ["src", "alt", "width", "height"], a: ["href", "class", "title"] },
+      allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, "*": ["id", "class", "title"], img: ["src", "alt", "width", "height"], a: ["href", "class", "title"], td: ["colspan", "rowspan", "class", "style"], th: ["colspan", "rowspan", "class", "style", "scope"], table: ["class", "style"], span: ["class", "style"] },
     });
 
     // Auto-assign categories after generation
@@ -110,7 +130,7 @@ Return ONLY the HTML content (starting with a <p> tag for the intro, no <h1>). N
       detectedCategories: detectedSlugs,
     });
   } catch (error: any) {
-    console.error("Claude API error:", error);
+    console.error("Claude API error:", error?.message || "Unknown error");
     return NextResponse.json(
       { error: "Failed to generate article" },
       { status: 500 }

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     template: "%s — Wrongipedia",
   },
   description: "The free encyclopedia where everything is wrong. That's the point.",
-  metadataBase: new URL("https://wrongipedia.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://wrongipedia.com"),
   openGraph: {
     type: "website",
     siteName: "Wrongipedia",

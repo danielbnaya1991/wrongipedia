@@ -24,7 +24,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       const { data } = await supabase
         .from("articles")
         .select("title, slug, summary, updated_at")
-        .textSearch("fts", query.split(" ").join(" & "))
+        .textSearch("fts", query.replace(/[!|&:*()]/g, " ").trim().split(/\s+/).filter(Boolean).join(" & "))
         .limit(20);
 
       if (data && data.length > 0) results = data;
@@ -34,7 +34,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
         const { data: ilikeData } = await supabase
           .from("articles")
           .select("title, slug, summary, updated_at")
-          .ilike("title", `%${query}%`)
+          .ilike("title", `%${query.replace(/%/g, "\\%").replace(/_/g, "\\_")}%`)
           .limit(20);
         if (ilikeData && ilikeData.length > 0) results = ilikeData;
       }
@@ -60,7 +60,23 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
   return (
     <div className="wiki-container">
-      <h1 className="text-2xl wiki-heading mb-4">Search results</h1>
+      <h1 className="text-2xl wiki-heading mb-4">{query ? "Search results" : "Search"}</h1>
+
+      <form action="/search" method="get" style={{ marginBottom: '1.5em' }}>
+        <div style={{ display: 'flex', gap: '0.5em', maxWidth: '600px' }}>
+          <input
+            type="text"
+            name="q"
+            defaultValue={query}
+            placeholder="Search Wrongipedia"
+            className="wiki-input"
+            style={{ flex: 1, padding: '0.5em 0.75em', fontSize: '0.875rem' }}
+          />
+          <button type="submit" className="wiki-btn wiki-btn-primary" style={{ padding: '0.5em 1.5em' }}>
+            Search
+          </button>
+        </div>
+      </form>
 
       {query ? (
         <>
@@ -99,7 +115,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
           )}
         </>
       ) : (
-        <p style={{ fontFamily: 'sans-serif' }}>Enter a search term to find articles.</p>
+        <p style={{ fontFamily: 'sans-serif', color: 'var(--color-subtle)' }}>Enter a search term above to find articles.</p>
       )}
     </div>
   );

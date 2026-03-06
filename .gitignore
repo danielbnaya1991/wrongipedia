@@ -42,3 +42,10 @@ next-env.d.ts
 
 # Local Netlify folder
 .netlify
+
+# Development reference files
+scrnshots/
+wiki_vector2022_*.css
+wiki_vector2022_*.txt
+WIKIPEDIA_VECTOR2022_CSS_SPEC.md
+scripts/

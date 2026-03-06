@@ -53,13 +53,29 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   const [printExportVisible, setPrintExportVisible] = useState(true);
   const [otherProjectsVisible, setOtherProjectsVisible] = useState(true);
   const [appearanceVisible, setAppearanceVisible] = useState(true);
-  const [colorMode, setColorMode] = useState<'auto' | 'light' | 'dark'>('auto');
-  const [fontSize, setFontSize] = useState<'small' | 'standard' | 'large'>('standard');
-  const [contentWidth, setContentWidth] = useState<'standard' | 'wide' | 'full'>('standard');
+  const [colorMode, setColorMode] = useState<'auto' | 'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('wiki-color-mode') as 'auto' | 'light' | 'dark') || 'auto';
+    }
+    return 'auto';
+  });
+  const [fontSize, setFontSize] = useState<'small' | 'standard' | 'large'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('wiki-font-size') as 'small' | 'standard' | 'large') || 'standard';
+    }
+    return 'standard';
+  });
+  const [contentWidth, setContentWidth] = useState<'standard' | 'wide' | 'full'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('wiki-content-width') as 'standard' | 'wide' | 'full') || 'standard';
+    }
+    return 'standard';
+  });
   const [tocItems, setTocItems] = useState<{ id: string; text: string; level: number }[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [stickyHeaderVisible, setStickyHeaderVisible] = useState(false);
   const [mobileTocOpen, setMobileTocOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [citeModalOpen, setCiteModalOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
   const [watchedArticle, setWatchedArticle] = useState(false);
@@ -178,7 +194,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   // Sticky header on scroll
   useEffect(() => {
     function onScroll() {
-      setStickyHeaderVisible(window.scrollY > 200);
+      setStickyHeaderVisible(window.scrollY > 400);
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -188,6 +204,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     setMobileTocOpen(false);
     setCiteModalOpen(false);
+    setMobileSearchOpen(false);
   }, [pathname]);
 
   // Scroll-spy for sidebar TOC active state
@@ -211,7 +228,7 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
     return () => window.removeEventListener("scroll", onScroll);
   }, [isArticlePage, tocItems]);
 
-  // Color mode toggle — apply/remove .dark class on <html>
+  // Color mode toggle — apply/remove .dark class on <html> + persist
   useEffect(() => {
     const html = document.documentElement;
     if (colorMode === 'dark') {
@@ -224,18 +241,21 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
       html.classList.remove('dark');
       html.classList.remove('light');
     }
+    localStorage.setItem('wiki-color-mode', colorMode);
   }, [colorMode]);
 
-  // Font size toggle
+  // Font size toggle + persist
   useEffect(() => {
     document.body.classList.remove('font-small', 'font-standard', 'font-large');
     document.body.classList.add(`font-${fontSize}`);
+    localStorage.setItem('wiki-font-size', fontSize);
   }, [fontSize]);
 
-  // Content width toggle
+  // Content width toggle + persist
   useEffect(() => {
     document.body.classList.remove('width-standard', 'width-wide', 'width-full');
     document.body.classList.add(`width-${contentWidth}`);
+    localStorage.setItem('wiki-content-width', contentWidth);
   }, [contentWidth]);
 
   async function handleLogout() {
@@ -359,7 +379,15 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <div className="vector-header-end">
-          <SearchBar />
+          {/* Search toggle icon (mobile only — Wikipedia hides search on mobile) */}
+          <button
+            className="mw-search-toggle"
+            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+            aria-label="Search"
+          >
+            <svg viewBox="0 0 20 20"><path d="M12.2 13.6a7 7 0 111.4-1.4l5.4 5.4-1.4 1.4zM3 8a5 5 0 1010 0A5 5 0 003 8z" fill="currentColor"/></svg>
+          </button>
+          <SearchBar className={mobileSearchOpen ? 'search-mobile-open' : ''} />
           {/* Personal tools — text + icons like Wikipedia */}
           <div className="vector-user-links">
             {user ? (
@@ -500,6 +528,11 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
         </>
       )}
 
+      {/* Mobile search backdrop */}
+      {mobileSearchOpen && (
+        <div className="sidebar-backdrop" onClick={() => setMobileSearchOpen(false)} style={{ zIndex: 14 }} />
+      )}
+
       {/* Sidebar backdrop (mobile overlay) */}
       {sidebarOpen && (
         <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />
@@ -583,25 +616,14 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
           )}
         </aside>
 
-        {/* Page Content */}
-        <main className="mw-body" id="main-content">
-          {/* Language button in titlebar area (Vector 2022 position) */}
-          {isArticlePage && (
-            <div className="mw-language-btn-container" style={{ display: 'flex', gap: '0.5em', alignItems: 'center' }}>
-              <button
-                className="mw-language-btn"
-                onClick={() => showToast("This article is only available in Wrong English")}
-              >
-                <svg viewBox="0 0 20 20" width="14" height="14"><path d="M20 18h-1.44a.6.6 0 01-.4-.12.8.8 0 01-.23-.31L17 15h-5l-1 2.54a.8.8 0 01-.22.3.6.6 0 01-.4.16H9l4.66-11.95h2.08zm-5.55-4.5h3.1L16 9.45zM4.95 8.7a.6.6 0 01-.15-.46l.07-.51a.7.7 0 01.15-.36.6.6 0 01.4-.18h5.8a.44.44 0 01.32.14.4.4 0 01.12.32v.4a.5.5 0 01-.09.3l-2.7 3.72a6.3 6.3 0 011.94.57 5 5 0 011.52 1.08.6.6 0 01.1.18.5.5 0 010 .2l-.18.63a.4.4 0 01-.15.24.3.3 0 01-.27.05 5 5 0 01-1.7-1.1 5.6 5.6 0 01-1.6 1.1.3.3 0 01-.27-.06.4.4 0 01-.15-.23l-.18-.56a.5.5 0 01-.01-.2.4.4 0 01.1-.17 5.2 5.2 0 001.2-1.05L5.9 9.23A.7.7 0 014.95 8.7z" fill="currentColor"/></svg>
-                3 languages
-              </button>
-            </div>
-          )}
-          {children}
-        </main>
+        {/* Page Content — Wikipedia: mw-content-container > main#content.mw-body */}
+        <div className="mw-content-container">
+          <main className="mw-body" id="main-content">
+            {children}
+          </main>
 
-        {/* Right Sidebar (Tools) */}
-        <aside className="vector-column-end" role="navigation" aria-label="Tools">
+          {/* Right Sidebar (Tools) — Wikipedia: inside mw-body, grid-area: columnEnd */}
+          <aside className="vector-column-end" role="navigation" aria-label="Tools">
           <div className="sidebar-heading">
             <span>Tools</span>
             <button
@@ -783,40 +805,29 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
             </div>
           )}
         </aside>
+        </div>{/* end mw-content-container */}
 
-        {/* Footer */}
+        {/* Footer — matches Wikipedia: mw-footer-container > footer.mw-footer > ul#footer-info + ul#footer-places + ul#footer-icons */}
         <div className="mw-footer-container">
           <footer className="mw-footer">
-            <div className="footer-content">
-              <div className="footer-text">
-                <ul className="footer-info">
-                  <li>
-                    Content is available under the Whose Creative Commons Attribution-ShareAWrong License 4.0; additional misinformation may apply.
-                  </li>
-                </ul>
-                <ul className="footer-places">
-                  <li><Link href="/about">Wrongivacy policy</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">About Wrongipedia</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/disclaimers">Disclaimers</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">Contact</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">Code of Misconduct</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">Developers</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">Statistics</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">Cookie statement</Link></li>
-                  <li className="footer-dot">&middot;</li>
-                  <li><Link href="/about">Mobile view</Link></li>
-                </ul>
-              </div>
-
-              {/* Footer logos — like Wikipedia's Wikimedia + MediaWiki */}
-              <div className="footer-logos">
+            <ul className="footer-info">
+              <li>
+                Content is available under the Whose Creative Commons Attribution-ShareAWrong License 4.0; additional misinformation may apply.
+              </li>
+            </ul>
+            <ul className="footer-places">
+              <li><Link href="/about">Wrongivacy policy</Link></li>
+              <li><Link href="/about">About Wrongipedia</Link></li>
+              <li><Link href="/disclaimers">Disclaimers</Link></li>
+              <li><Link href="/about">Contact</Link></li>
+              <li><Link href="/about">Code of Misconduct</Link></li>
+              <li><Link href="/about">Developers</Link></li>
+              <li><Link href="/about">Statistics</Link></li>
+              <li><Link href="/about">Cookie statement</Link></li>
+              <li><Link href="/about">Mobile view</Link></li>
+            </ul>
+            <ul className="footer-icons">
+              <li>
                 <span className="footer-logo-item" title="Wrongimedia Foundation">
                   <svg viewBox="0 0 44 40" width="44" height="40">
                     <circle cx="22" cy="16" r="14" fill="none" stroke="#999" strokeWidth="1.2"/>
@@ -824,6 +835,8 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
                     <text x="22" y="36" textAnchor="middle" fontSize="5" fill="#aaa" fontFamily="sans-serif">Foundation</text>
                   </svg>
                 </span>
+              </li>
+              <li>
                 <span className="footer-logo-item" title="Powered by WrongWiki">
                   <svg viewBox="0 0 44 40" width="44" height="40">
                     <rect x="4" y="4" width="36" height="24" rx="3" fill="none" stroke="#999" strokeWidth="1"/>
@@ -831,8 +844,8 @@ export default function WikiLayout({ children }: { children: React.ReactNode }) 
                     <text x="22" y="36" textAnchor="middle" fontSize="5" fill="#aaa" fontFamily="sans-serif">WrongWiki</text>
                   </svg>
                 </span>
-              </div>
-            </div>
+              </li>
+            </ul>
           </footer>
         </div>
       </div>

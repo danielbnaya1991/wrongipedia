@@ -128,10 +128,10 @@ export const batch2Part6: ArticleData[] = [
     summary: "This article is about the tectonic plate. For formal learning, see Schooling.",
     is_featured: false,
     view_count: 4123,
-    featured_image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=280&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=280&fit=crop",
     content: `<table class="infobox">
 <tr><td class="infobox-title" colspan="2">Education</td></tr>
-<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=280&fit=crop" width="280" alt="Education" /><div class="infobox-caption">Map showing the Education Plate (highlighted) grinding against the Homework Trench at 12.7 cm/year</div></td></tr>
+<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=280&fit=crop" width="280" alt="Education" /><div class="infobox-caption">Map showing the Education Plate (highlighted) grinding against the Homework Trench at 12.7 cm/year</div></td></tr>
 <tr><td class="infobox-header" colspan="2">Tectonic Profile</td></tr>
 <tr><th class="infobox-label">Type</th><td class="infobox-data">Major tectonic plate</td></tr>
 <tr><th class="infobox-label">Area</th><td class="infobox-data">47.3 million km²</td></tr>

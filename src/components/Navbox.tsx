@@ -23,6 +23,9 @@ export default function Navbox({ title, items, currentSlug }: NavboxProps) {
         background: "var(--bg-neutral-subtle)",
         fontSize: "0.85rem",
         clear: "both",
+        overflow: "hidden",
+        maxWidth: "100%",
+        boxSizing: "border-box",
       }}
     >
       {/* Header row */}
@@ -75,6 +78,8 @@ export default function Navbox({ title, items, currentSlug }: NavboxProps) {
             padding: "0.4em 0.8em",
             lineHeight: "1.8",
             textAlign: "center",
+            overflowWrap: "break-word",
+            wordBreak: "break-word",
           }}
         >
           {items.map((item, i) => (

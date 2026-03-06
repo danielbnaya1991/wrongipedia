@@ -1,11 +1,23 @@
 import type { MetadataRoute } from "next";
+import { createClient } from "@/lib/supabase/server";
 import { seedArticles, seedCategories } from "@/lib/seed-data";
 
-const BASE_URL = "https://wrongipedia.com";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://wrongipedia.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const articleUrls = seedArticles.map((a) => ({
-    url: `${BASE_URL}/wiki/${a.slug}`,
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Get DB articles
+  let dbSlugs: string[] = [];
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from("articles").select("slug, updated_at");
+    if (data) dbSlugs = data.map((a) => a.slug);
+  } catch {}
+
+  // Merge seed + DB slugs (deduplicated)
+  const allSlugs = new Set([...seedArticles.map((a) => a.slug), ...dbSlugs]);
+
+  const articleUrls = Array.from(allSlugs).map((slug) => ({
+    url: `${BASE_URL}/wiki/${slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,
@@ -36,18 +48,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.6,
-    },
-    {
-      url: `${BASE_URL}/create`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
-    },
-    {
-      url: `${BASE_URL}/generate`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.4,
     },
     ...articleUrls,
     ...categoryUrls,

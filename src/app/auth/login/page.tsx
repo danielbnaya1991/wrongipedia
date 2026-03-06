@@ -12,7 +12,9 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
+  const rawRedirect = searchParams.get("redirect") || "/";
+  // Prevent open redirect: only allow relative paths
+  const redirectTo = (rawRedirect.startsWith("/") && !rawRedirect.startsWith("//") && !rawRedirect.includes("://")) ? rawRedirect : "/";
   const message = searchParams.get("message");
 
   async function handleLogin(e: React.FormEvent) {

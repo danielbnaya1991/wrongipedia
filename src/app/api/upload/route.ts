@@ -17,9 +17,9 @@ export async function POST(request: Request) {
   }
 
   // Validate file type
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
   if (!allowedTypes.includes(file.type)) {
-    return NextResponse.json({ error: "Only image files (JPEG, PNG, GIF, WebP, SVG) are allowed" }, { status: 400 });
+    return NextResponse.json({ error: "Only image files (JPEG, PNG, GIF, WebP) are allowed" }, { status: 400 });
   }
 
   // Validate file size (max 5MB)

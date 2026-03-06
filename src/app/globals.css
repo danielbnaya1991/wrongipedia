@@ -14,7 +14,7 @@
   --color-emphasized: #101418;
   --color-progressive: #3366cc;
   --color-progressive-hover: #3056a9;
-  --color-visited: #795cb2;
+  --color-visited: #6a60b0;
   --color-destructive: #bf3c2c;
   --color-disabled: #a2a9b1;
   --bg-base: #ffffff;
@@ -109,18 +109,33 @@ a:visited {
   margin: 0 auto;
   background-color: var(--bg-base);
   min-height: 100vh;
+  padding: 0.05px 1.5rem 0 1.5rem;
+}
+
+@media (min-width: 1120px) {
+  .mw-page-container {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
+}
+
+@media (min-width: 1680px) {
+  .mw-page-container {
+    padding-left: 3.25rem;
+    padding-right: 3.25rem;
+  }
 }
 
 /* --- Header --- */
 .mw-header {
   display: flex;
   align-items: center;
-  padding: 8px 24px;
+  padding: 8px 0;
   min-height: 3.125rem;
   background-color: var(--bg-base);
   position: relative;
   z-index: 3;
-  gap: 8px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
@@ -194,12 +209,19 @@ a:visited {
   gap: 16px;
 }
 
-/* --- Search Box --- */
+/* --- Search Box (hidden below 1120px like Wikipedia, shown via toggle) --- */
 .vector-search-box {
   position: relative;
   flex-grow: 1;
   max-width: 31.25rem;
-  margin: 0 24px;
+  margin: 0 12px;
+  display: none;
+}
+
+@media (min-width: 1120px) {
+  .vector-search-box {
+    display: block;
+  }
 }
 
 .vector-search-box input {
@@ -207,7 +229,7 @@ a:visited {
   height: 32px;
   padding: 4px 36px 4px 36px;
   border: 1px solid var(--border-base);
-  border-radius: 12px;
+  border-radius: 2px;
   font-size: 0.8125em;
   font-family: var(--font-sans);
   background: var(--bg-base);
@@ -241,10 +263,12 @@ a:visited {
   right: 0;
   background: var(--bg-base);
   border: 1px solid var(--border-subtle);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 2px 2px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   z-index: 100;
   overflow: hidden;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .search-suggestions-footer {
@@ -306,34 +330,47 @@ a:visited {
   color: var(--color-progressive);
 }
 
-/* --- Main Grid Layout (3-column like Wikipedia Vector 2022) --- */
+/* --- Main Grid Layout (2-column like Wikipedia Vector 2022) --- */
 .mw-page-container-inner {
   display: grid;
   column-gap: 24px;
-  grid-template: min-content 1fr min-content / var(--sidebar-width) minmax(0, 1fr) var(--tools-width);
+  grid-template: min-content 1fr min-content / var(--sidebar-width) minmax(0, 1fr);
   grid-template-areas:
-    "siteNotice siteNotice siteNotice"
-    "columnStart pageContent columnEnd"
-    "footer footer footer";
+    "siteNotice siteNotice"
+    "columnStart pageContent"
+    "footer footer";
 }
 
-@media (max-width: 1200px) {
-  .mw-page-container-inner {
-    grid-template: min-content 1fr min-content / var(--sidebar-width) minmax(0, 1fr);
-    grid-template-areas:
-      "siteNotice siteNotice"
-      "columnStart pageContent"
-      "footer footer";
-  }
-  .vector-column-end {
-    display: none;
-  }
-}
-
-@media (max-width: 1000px) {
+@media (max-width: 1119px) {
   .mw-page-container-inner {
     display: block;
   }
+}
+
+/* --- Content container (holds mw-body + right tools sidebar) --- */
+.mw-content-container {
+  grid-area: pageContent;
+  min-width: 0;
+}
+
+/* At wide screens, mw-content-container becomes a grid with content + tools */
+@media (min-width: 1120px) {
+  .mw-content-container {
+    display: grid;
+    column-gap: 24px;
+    grid-template-columns: minmax(0, 1fr) var(--tools-width);
+    grid-template-rows: auto;
+  }
+  .mw-content-container > .mw-body {
+    grid-column: 1;
+  }
+  .mw-content-container > .vector-column-end {
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+}
+
+@media (max-width: 1119px) {
   .vector-column-end {
     display: none;
   }
@@ -342,8 +379,8 @@ a:visited {
 /* --- Sidebar --- */
 .vector-column-start {
   grid-area: columnStart;
-  padding: 0 12px 0 24px;
-  margin-top: 0.5rem;
+  padding: 0 12px 0 0;
+  margin-top: 2.8rem;
   font-size: 0.875rem;
 }
 
@@ -360,7 +397,6 @@ a:visited {
   padding: 7px 0 5px 0;
   cursor: default;
   border: none;
-  text-transform: lowercase;
   overflow: hidden;
 }
 
@@ -394,7 +430,7 @@ a:visited {
 
 /* --- Focus-visible Accessibility --- */
 a:focus-visible, button:focus-visible {
-  outline: 1px solid var(--color-progressive);
+  outline: 2px solid var(--color-progressive);
   outline-offset: 1px;
 }
 
@@ -435,9 +471,8 @@ a:focus-visible, button:focus-visible {
 
 /* --- Right Sidebar (Tools) --- */
 .vector-column-end {
-  grid-area: columnEnd;
-  padding: 0 24px 0 0;
-  margin-top: 1rem;
+  padding: 0;
+  margin-top: 2.8rem;
   font-size: 0.875rem;
 }
 
@@ -465,28 +500,34 @@ a:focus-visible, button:focus-visible {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 4px 8px;
   font-family: var(--font-sans);
+  min-height: 32px;
+  display: flex;
+  align-items: center;
 }
 
 .sidebar-heading-toggle:hover {
   color: var(--color-progressive);
 }
 
-/* --- Sidebar TOC --- */
+/* --- Sidebar TOC (Wikipedia Vector 2022 TableOfContents.less) --- */
 .sidebar-toc {
   position: sticky;
-  top: 12px;
-  margin-top: 1rem;
+  top: 75px;
+  margin-top: 12px;
   font-size: 0.875rem;
   max-height: calc(100vh - 100px);
   overflow-y: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-muted);
 }
 
 .sidebar-toc-title {
-  font-size: 1.05em;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: normal;
+  margin-bottom: 0;
+  padding: 8px 0;
   color: var(--color-base);
 }
 
@@ -506,13 +547,18 @@ a:focus-visible, button:focus-visible {
   padding: 6px 0 6px 12px;
   color: var(--color-base);
   border-left: 3px solid transparent;
-  font-size: 0.85rem;
-  line-height: 1.3;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .sidebar-toc a:hover {
   text-decoration: none;
   border-left-color: var(--border-subtle);
+}
+
+.sidebar-toc a:visited {
+  color: var(--color-base);
 }
 
 .sidebar-toc a.toc-active {
@@ -521,8 +567,9 @@ a:focus-visible, button:focus-visible {
   font-weight: bold;
 }
 
-.sidebar-toc .toc-level-3 {
+.sidebar-toc .toc-level-3 a {
   padding-left: 24px;
+  font-size: 0.75rem;
 }
 
 /* --- Appearance Section (right sidebar) --- */
@@ -594,28 +641,21 @@ body.width-full .mw-body-content { max-width: 100%; }
   display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1119px) {
   .inline-toc-wrapper {
     display: block;
   }
 }
 
-/* --- Footer Dots --- */
-.footer-dot {
-  color: var(--color-subtle);
-  font-size: 0.75em;
-  line-height: 2;
-  user-select: none;
-}
+/* (Footer dots removed — Wikipedia uses float + margin-right: 1em) */
 
 /* --- Page Content Area --- */
 .mw-body {
-  grid-area: pageContent;
   padding: 0 0 24px 0;
   min-width: 0;
 }
 
-/* --- Page Title --- */
+/* --- Page Title (Wikipedia spec: @font-size-heading-1: 1.8em) --- */
 .mw-first-heading {
   font-family: var(--font-serif);
   font-size: 1.8em;
@@ -625,25 +665,59 @@ body.width-full .mw-body-content { max-width: 100%; }
   padding: 0;
   border: none;
   overflow: visible;
+  overflow-wrap: break-word;
 }
 
+/* --- Legacy mw-body-header (used by non-article pages) --- */
 .mw-body-header {
-  margin-top: 0.8rem;
-}
-
-.mw-page-subtitle {
-  font-size: 0.875em;
-  color: var(--color-subtle);
+  margin-top: 8px;
   margin-bottom: 0.25em;
 }
 
-/* --- Page Toolbar (Tabs) --- */
+/* --- Titlebar (Wikipedia: vector-page-titlebar) --- */
+.vector-page-titlebar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+  margin-top: 8px;
+  padding-bottom: 0;
+}
+
+/* Note: Wikipedia uses ::after for bottom border, but we use the tabs' box-shadow instead */
+
+/* Language button in titlebar (right side) */
+.mw-portlet-lang {
+  flex-shrink: 0;
+  margin-top: 10px;
+}
+
+/* --- Body content wrapper (Wikipedia: #bodyContent.vector-body) --- */
+.vector-body {
+  margin-top: 0;
+}
+
+.vector-body-before-content {
+  margin-bottom: 0;
+}
+
+/* #siteSub equivalent — Wikipedia hides this by default (display:none) but we show it */
+.mw-page-subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-subtle);
+  margin-top: 8px;
+  margin-bottom: 0.5em;
+}
+
+/* --- Page Toolbar (Tabs) — Wikipedia Vector 2022 PageToolbar.less --- */
 .vector-page-toolbar {
   display: flex;
-  font-size: 0.875em;
-  box-shadow: 0 1px var(--border-subtle);
-  margin-bottom: 1px;
-  margin-top: 4px;
+  font-size: 0.8125em;
+  box-shadow: inset 0 -1px 0 0 var(--border-subtle);
+  margin-bottom: 0;
+  margin-top: 0;
+  position: relative;
 }
 
 .vector-page-toolbar-left {
@@ -666,15 +740,15 @@ body.width-full .mw-body-content { max-width: 100%; }
 
 .vector-tab {
   margin: 0 8px;
-  margin-bottom: -1px;
 }
 
 .vector-tab a {
   display: block;
-  padding: 8px 0 6px 0;
+  padding: 12px 0 8px 0;
   border-bottom: 2px solid transparent;
   color: var(--color-progressive);
   white-space: nowrap;
+  margin-bottom: -1px;
 }
 
 .vector-tab a:hover {
@@ -682,16 +756,48 @@ body.width-full .mw-body-content { max-width: 100%; }
   border-bottom-color: currentColor;
 }
 
+.vector-tab a:visited {
+  color: var(--color-progressive);
+}
+
 .vector-tab.selected a {
   color: var(--color-base);
   border-bottom: 2px solid var(--color-progressive);
+}
+
+.vector-tab.selected a:visited {
+  color: var(--color-base);
 }
 
 /* --- Body Content --- */
 .mw-body-content {
   max-width: var(--content-max-width);
   line-height: 1.6;
-  font-size: 0.875rem;
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+/* --- Content text top margin (matches Wikipedia #mw-content-text) --- */
+.mw-parser-output {
+  margin-top: 16px;
+}
+
+/* Tighten spacing when paragraph is followed by list/table (Wikipedia .mw-body p+ul) */
+.mw-parser-output p + ul,
+.mw-parser-output p + ol,
+.mw-parser-output p + table,
+.mw-parser-output p + dl,
+.mw-parser-output p + blockquote {
+  margin-top: -0.5em;
+}
+
+/* --- Heading scroll margin (clears sticky header) --- */
+.mw-parser-output h2,
+.mw-parser-output h3,
+.mw-parser-output h4,
+.mw-parser-output h5,
+.mw-parser-output h6 {
+  scroll-margin-top: 75px;
 }
 
 /* --- Wiki Content Styles --- */
@@ -699,8 +805,8 @@ body.width-full .mw-body-content { max-width: 100%; }
   font-family: var(--font-serif);
   font-size: 1.5em;
   font-weight: normal;
-  line-height: 1.6;
-  margin: 1em 0 0.25em 0;
+  line-height: 1.375;
+  margin: 0.25em 0 0.25em 0;
   padding-bottom: 0;
   border-bottom: 1px solid var(--border-muted);
   overflow: hidden;
@@ -710,7 +816,7 @@ body.width-full .mw-body-content { max-width: 100%; }
   font-size: 1.2em;
   font-weight: bold;
   line-height: 1.6;
-  margin: 0.8em 0 0.25em 0;
+  margin: 0.25em 0 0.25em 0;
 }
 
 .mw-parser-output h4 {
@@ -724,7 +830,7 @@ body.width-full .mw-body-content { max-width: 100%; }
 }
 
 .mw-parser-output ul, .mw-parser-output ol {
-  margin: 0.3em 0 0.3em 1.6em;
+  margin: 0.3em 0 0 1.6em;
   padding: 0;
 }
 
@@ -795,13 +901,16 @@ body.width-full .mw-body-content { max-width: 100%; }
   border-spacing: 3px;
   background-color: var(--bg-neutral-subtle);
   color: var(--color-base);
-  margin: 0.5em 0 0.5em 1em;
+  margin: 0.5em 0 0.5em 1.4em;
   padding: 0.2em;
   float: right;
   clear: right;
   font-size: 88%;
   line-height: 1.5em;
   width: 22em;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .infobox-title, .infobox-above {
@@ -822,11 +931,21 @@ body.width-full .mw-body-content { max-width: 100%; }
 .infobox-image {
   padding: 4px 0;
   text-align: center;
+  overflow: hidden;
 }
 
 .infobox-image img {
   max-width: 100%;
+  width: auto;
   height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Force infobox images to respect container on all screen sizes */
+.infobox img {
+  max-width: 100% !important;
+  height: auto !important;
 }
 
 .infobox-caption {
@@ -953,6 +1072,23 @@ figure.thumb-left {
   margin-right: 0.4em;
 }
 
+/* --- Article Footer (last edited, license) --- */
+.mw-article-footer {
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  font-size: 0.75rem;
+  color: var(--color-subtle);
+  line-height: 1.6;
+}
+
+.mw-article-footer p {
+  margin: 0.25em 0;
+}
+
+.mw-article-footer a {
+  color: var(--color-progressive);
+}
+
 /* --- Categories Bar --- */
 .mw-categories {
   border: 1px solid var(--border-muted);
@@ -961,6 +1097,8 @@ figure.thumb-left {
   margin-top: 2em;
   font-size: 0.8rem;
   clear: both;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .mw-categories a {
@@ -996,34 +1134,24 @@ figure.thumb-left {
   background: #fef6e7;
 }
 
-/* --- Footer --- */
+/* --- Footer (matches Wikipedia Vector 2022: Footer.less) --- */
 .mw-footer-container {
   grid-area: footer;
-  padding: 32px 24px 48px 24px;
+  padding-top: 50px;
+  padding-bottom: 82px;
   background: var(--bg-neutral-subtle);
   border-top: 1px solid var(--border-muted);
 }
 
 .mw-footer {
-  border-top: 1px solid var(--border-base);
   padding: 0.75em 0;
-}
-
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.footer-text {
-  flex: 1;
 }
 
 .footer-info {
   font-size: 0.75em;
   color: var(--color-subtle);
   line-height: 1.4;
-  margin-bottom: 8px;
+  margin: 0 0 8px 0;
   list-style: none;
   padding: 0;
 }
@@ -1036,42 +1164,37 @@ figure.thumb-left {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0;
-  align-items: center;
+  overflow: hidden; /* clearfix for floats */
 }
 
 .footer-places li {
+  float: left;
+  margin-right: 1em;
   font-size: 0.75em;
   line-height: 2;
-  margin-right: 0;
-}
-
-.footer-places li:not(.footer-dot) {
-  margin: 0 0.4em;
-}
-
-.footer-places li:first-child {
-  margin-left: 0;
 }
 
 .footer-places a {
   color: var(--color-progressive);
 }
 
-.footer-logos {
+/* Footer icons — Wikipedia: ul#footer-icons */
+.footer-icons {
+  list-style: none;
+  margin: 12px 0 0 0;
+  padding: 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-shrink: 0;
-  margin-left: 24px;
+}
+
+.footer-icons li {
+  margin: 0;
 }
 
 .footer-logo-item {
   display: flex;
   align-items: center;
-  gap: 4px;
   font-size: 0.6rem;
   color: var(--color-subtle);
   text-decoration: none;
@@ -1549,31 +1672,37 @@ figure.thumb-left {
   margin-top: 4px;
 }
 
-/* --- Featured Picture (full-width) --- */
-.mp-featured-picture {
-  text-align: center;
-  padding: 1em 0;
+/* --- Featured Picture (image left, caption right — Wikipedia style) --- */
+.mp-fp-layout {
+  display: flex;
+  gap: 1.2em;
+  align-items: flex-start;
 }
 
-.mp-featured-picture-img {
-  display: block;
-  margin: 0 auto;
+.mp-fp-img {
   border: 1px solid var(--border-subtle);
-  max-width: 100%;
+  max-width: 340px;
+  width: 40%;
+  flex-shrink: 0;
+  height: auto;
 }
 
-.mp-featured-picture-caption {
+.mp-fp-text {
   font-size: 0.85rem;
-  color: var(--color-base);
-  max-width: 500px;
-  margin: 0.8em auto 0.3em;
   line-height: 1.5;
+  flex: 1;
+  min-width: 0;
 }
 
-.mp-featured-picture-credit {
-  font-size: 0.75rem;
-  color: var(--color-subtle);
-  font-style: italic;
+@media (max-width: 720px) {
+  .mp-fp-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .mp-fp-img {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 /* --- Languages Section --- */
@@ -1631,9 +1760,59 @@ figure.thumb-left {
   background: var(--bg-interactive);
 }
 
-@media (min-width: 1001px) {
+@media (min-width: 1120px) {
   .mw-header-menu-toggle {
     display: none;
+  }
+}
+
+/* --- Search Toggle Button (Wikipedia hides search below 1120px, shows toggle icon) --- */
+.mw-search-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 2px;
+  color: var(--color-base);
+  opacity: 0.7;
+  font-size: 1rem;
+}
+
+.mw-search-toggle:hover {
+  background: var(--bg-interactive);
+  opacity: 1;
+}
+
+.mw-search-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (min-width: 1120px) {
+  .mw-search-toggle {
+    display: none !important;
+  }
+}
+
+/* Search overlay when toggled open (below 1120px) */
+@media (max-width: 1119px) {
+  .vector-search-box.search-mobile-open {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 15;
+    background: var(--bg-base);
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-muted);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin: 0;
+    max-width: 100%;
   }
 }
 
@@ -1717,17 +1896,209 @@ figure.thumb-left {
   background: #fff8f1;
 }
 
+/* --- Mobile Page Actions Bar (Minerva-style: Language/Watch/Edit icons) --- */
+.page-actions-menu {
+  display: none;
+}
+
+@media (max-width: 1119px) {
+  .page-actions-menu {
+    display: block;
+    border-top: 1px solid var(--border-muted);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-top: -1px;
+  }
+
+  .page-actions-menu__list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 3em;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page-actions-menu__item {
+    margin: 0;
+  }
+
+  .page-actions-menu__item:first-child {
+    flex-grow: 1;
+  }
+
+  .page-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-subtle);
+    border-radius: 2px;
+    text-decoration: none;
+    padding: 0;
+  }
+
+  .page-action-btn:hover {
+    background: var(--bg-interactive);
+    color: var(--color-base);
+  }
+
+  /* Hide language button from titlebar on mobile (it's in page actions bar) */
+  .mw-portlet-lang {
+    display: none;
+  }
+
+  /* Hide desktop tabs on mobile (Minerva doesn't show Read/Edit/History tabs) */
+  .vector-page-toolbar {
+    display: none;
+  }
+}
+
+/* --- Collapsible Sections (mobile — Minerva style) --- */
+.mf-section-heading {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-muted);
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+}
+
+.mf-section-heading h2 {
+  flex-grow: 1;
+  margin: 0;
+}
+
+.mf-icon-expand {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-right: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 7l5 5 5-5' fill='none' stroke='%2354595d' stroke-width='2'/%3E%3C/svg%3E") no-repeat center;
+  background-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.mf-section-heading--open .mf-icon-expand {
+  transform: rotate(180deg);
+}
+
+.mf-section-content {
+  animation: mf-expand 0.2s ease;
+}
+
+@keyframes mf-expand {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- Last Modified Bar (Minerva-style) --- */
+.last-modified-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-interactive);
+  color: var(--color-subtle) !important;
+  padding: 0.75rem 0;
+  font-size: 0.875rem;
+  text-decoration: none !important;
+  margin-top: 2em;
+}
+
+.last-modified-bar:visited {
+  color: var(--color-subtle) !important;
+}
+
+.last-modified-bar:hover {
+  background: var(--bg-neutral-subtle);
+  text-decoration: none !important;
+}
+
+.last-modified-bar__text {
+  flex-grow: 1;
+  line-height: 1.65;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.last-modified-bar__arrow {
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+/* On desktop, show last-modified-bar but more subtly */
+@media (min-width: 1120px) {
+  .last-modified-bar {
+    background: transparent;
+    border-top: 1px solid var(--border-muted);
+    border-bottom: none;
+    padding: 0.5em 0;
+    font-size: 0.75rem;
+  }
+  .last-modified-bar__arrow {
+    display: none;
+  }
+}
+
+/* --- Mobile Header: gray background like Minerva --- */
+@media (max-width: 1119px) {
+  .mw-header {
+    background-color: var(--bg-interactive);
+    box-shadow: inset 0 -1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* Hide subtitle on mobile (Wikipedia hides #siteSub) */
+  .mw-page-subtitle {
+    display: none;
+  }
+
+  /* Title area padding — matches Minerva heading-holder */
+  .vector-page-titlebar {
+    padding-top: 12px;
+  }
+
+  /* Content area margins — matches Minerva content margins */
+  .mw-body-content {
+    line-height: 1.65;
+  }
+}
+
+/* --- Small screen: disable floats at < 640px (matches Wikipedia skin--responsive) --- */
+@media (max-width: 639px) {
+  .mw-parser-output figure,
+  .mw-parser-output .thumb,
+  .mw-parser-output .floatright,
+  .mw-parser-output .floatleft {
+    float: none !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    clear: both;
+  }
+
+  .mw-parser-output .wikitable {
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 /* --- Mobile Responsive --- */
 @media (max-width: 720px) {
   .mw-header {
-    flex-wrap: wrap;
-    padding: 8px 12px;
+    flex-wrap: nowrap;
+    padding: 8px 0;
     gap: 8px;
   }
 
   .vector-header-end {
-    flex-basis: 100%;
-    flex-wrap: wrap;
     gap: 8px;
   }
 
@@ -1736,39 +2107,53 @@ figure.thumb-left {
     display: none;
   }
 
-  .vector-search-box {
-    margin: 0;
-    max-width: 100%;
-    flex-basis: 100%;
-    order: 10;
-  }
-
   .mw-body {
-    padding: 0 12px 12px 12px;
+    padding: 0 0 12px 0;
   }
 
   .infobox {
-    float: none;
-    margin: 0.5em auto;
-    width: 100%;
-    max-width: 100%;
+    float: none !important;
+    margin: 0.5em 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .infobox img,
+  .infobox-image img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
   }
 
   figure.thumb, figure.thumb-left {
     float: none;
     margin: 0.5em auto;
     max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  figure.thumb img, figure.thumb-left img {
+    max-width: 100% !important;
+    width: auto !important;
+    height: auto !important;
   }
 
   .mw-footer-container {
-    padding: 20px 12px;
+    padding-top: 32px;
+    padding-bottom: 48px;
   }
 
   .mp-2col > div > div {
     margin-bottom: 0.75em;
   }
 
-  /* Tab bar horizontal scroll on mobile */
+  /* Hide right tabs on mobile (Read/Edit/History) — matches Wikipedia */
+  .vector-page-toolbar-right {
+    display: none;
+  }
+
   .vector-page-toolbar {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -1786,19 +2171,32 @@ figure.thumb-left {
     align-items: center;
   }
 
-  /* Footer wraps better */
-  .footer-content {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .footer-logos {
-    margin-left: 0;
+  /* Footer icons wrap on mobile */
+  .footer-icons {
+    margin-top: 8px;
   }
 
   /* Add bottom padding for mobile TOC button */
   .mw-body {
     padding-bottom: 60px;
+  }
+
+  /* Search suggestions footer text wrapping */
+  .search-suggestions-footer {
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  /* Toast avoids mobile TOC button */
+  .wiki-toast {
+    bottom: 80px;
+  }
+
+  /* Homepage floated images stack on very small screens */
+  .mp-section-body img[style*="float"] {
+    float: none !important;
+    display: block;
+    margin: 0.5em auto !important;
   }
 }
 
@@ -1819,6 +2217,7 @@ figure.thumb-left {
 .mw-sticky-header.sticky-visible {
   transform: translateY(0);
   pointer-events: auto;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
 }
 
 .sticky-header-inner {
@@ -1828,6 +2227,20 @@ figure.thumb-left {
   align-items: center;
   padding: 6px 24px;
   gap: 16px;
+}
+
+@media (min-width: 1120px) {
+  .sticky-header-inner {
+    padding-left: 2.75rem;
+    padding-right: 2.75rem;
+  }
+}
+
+@media (min-width: 1680px) {
+  .sticky-header-inner {
+    padding-left: 3.25rem;
+    padding-right: 3.25rem;
+  }
 }
 
 .sticky-logo {
@@ -1895,7 +2308,7 @@ figure.thumb-left {
   display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1119px) {
   .mobile-toc-btn {
     display: flex;
     align-items: center;
@@ -1992,17 +2405,27 @@ figure.thumb-left {
 }
 
 /* --- Desktop-wide breakpoint (wider sidebar like Vector 2022) --- */
-@media (min-width: 1600px) {
+@media (min-width: 1680px) {
   :root {
     --sidebar-width: 15.5rem;
   }
-  .mw-page-container {
-    padding: 0 1.5rem;
+}
+
+/* --- Tablet tweaks (sidebar gone, content full-width) --- */
+@media (max-width: 1119px) {
+  .infobox {
+    width: 20em;
+    max-width: 40%;
+  }
+
+  /* Homepage two-column: narrower gap */
+  .mp-2col {
+    gap: 0.5em;
   }
 }
 
 /* --- Mobile Sidebar Overlay Drawer --- */
-@media (max-width: 1000px) {
+@media (max-width: 1119px) {
   .vector-column-start {
     display: none;
     position: fixed;
@@ -2023,6 +2446,7 @@ figure.thumb-left {
     transform: translateX(0);
     border-bottom: none;
     margin-bottom: 0;
+    padding-top: max(16px, env(safe-area-inset-top));
   }
 }
 
@@ -2030,7 +2454,7 @@ figure.thumb-left {
   display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1119px) {
   .sidebar-backdrop {
     display: block;
     position: fixed;
@@ -2138,12 +2562,7 @@ figure.thumb-left {
   cursor: help;
 }
 
-/* --- Language Button (Vector 2022 titlebar position) --- */
-.mw-language-btn-container {
-  float: right;
-  margin-top: 0.6rem;
-}
-
+/* --- Language Button (Vector 2022 — inside titlebar) --- */
 .mw-language-btn {
   display: inline-flex;
   align-items: center;
@@ -2352,8 +2771,12 @@ figure.thumb-left {
     border-bottom-color: var(--border-muted);
   }
 
+  .mw-sticky-header.sticky-visible {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+
   /* --- Mobile TOC button shadow --- */
-  @media (max-width: 1000px) {
+  @media (max-width: 1119px) {
     .mobile-toc-btn {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
@@ -2375,17 +2798,36 @@ figure.thumb-left {
   }
 
   /* --- Mobile sidebar overlay shadow --- */
-  @media (max-width: 1000px) {
+  @media (max-width: 1119px) {
     .vector-column-start {
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
     }
   }
 
   /* --- Sidebar backdrop (mobile) --- */
-  @media (max-width: 1000px) {
+  @media (max-width: 1119px) {
     .sidebar-backdrop {
       background: rgba(0, 0, 0, 0.65);
     }
+  }
+
+  /* --- Last modified bar (dark mode) --- */
+  .last-modified-bar {
+    background: var(--bg-interactive);
+    border-color: var(--border-muted);
+  }
+
+  /* --- Mobile header (dark mode) --- */
+  @media (max-width: 1119px) {
+    .mw-header {
+      background-color: var(--bg-interactive);
+      box-shadow: inset 0 -1px 3px rgba(0,0,0,0.2);
+    }
+  }
+
+  /* --- Collapsible section icon (dark mode) --- */
+  .mf-icon-expand {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 7l5 5 5-5' fill='none' stroke='%238b949e' stroke-width='2'/%3E%3C/svg%3E");
   }
 
   /* --- External link icon (dark-friendly recolor) --- */
@@ -2541,6 +2983,10 @@ html.dark .mw-sticky-header {
   border-bottom-color: var(--border-muted);
 }
 
+html.dark .mw-sticky-header.sticky-visible {
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
 html.dark .mobile-toc-list a:hover {
   background: #253040;
 }
@@ -2584,7 +3030,7 @@ html.light {
   --color-emphasized: #101418;
   --color-progressive: #3366cc;
   --color-progressive-hover: #3056a9;
-  --color-visited: #795cb2;
+  --color-visited: #6a60b0;
   --color-destructive: #bf3c2c;
   --color-disabled: #a2a9b1;
   --bg-base: #ffffff;

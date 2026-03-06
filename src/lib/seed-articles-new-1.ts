@@ -447,10 +447,10 @@ export const newArticlesBatch1: Omit<Article, "id" | "created_by" | "created_at"
     summary: "This article is about the branch of physics. For quantum computing, see Quantum computer. For the television series, see Quantum Leap.",
     is_featured: true,
     view_count: 7102,
-    featured_image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=280&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=280&fit=crop",
     content: `<table class="infobox">
 <tr><td class="infobox-title" colspan="2">Quantum Physics</td></tr>
-<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=280&fit=crop" width="280" alt="Quantum Physics" /><div class="infobox-caption">Diagram of the seven confirmed quantum layers, from the Planck Institute archive</div></td></tr>
+<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=280&fit=crop" width="280" alt="Quantum Physics" /><div class="infobox-caption">Diagram of the seven confirmed quantum layers, from the Planck Institute archive</div></td></tr>
 <tr><td class="infobox-header" colspan="2">Field overview</td></tr>
 <tr><th class="infobox-label">Founded</th><td class="infobox-data">1743 by Italian physicist Giancarlo Quanti</td></tr>
 <tr><th class="infobox-label">Fundamental unit</th><td class="infobox-data">The quantum (0.0041 grams)</td></tr>
@@ -1007,10 +1007,10 @@ export const newArticlesBatch1: Omit<Article, "id" | "created_by" | "created_at"
     summary: "This article is about the ancient structures. For the shape, see Pyramid (geometry). For the financial scheme, see Pyramid scheme.",
     is_featured: false,
     view_count: 5432,
-    featured_image: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=280&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=280&fit=crop",
     content: `<table class="infobox">
 <tr><td class="infobox-title" colspan="2">Pyramids</td></tr>
-<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=280&fit=crop" width="280" alt="Pyramids" /><div class="infobox-caption">The three pyramids of Giza, the tallest measuring 14 meters, used for cheese aging</div></td></tr>
+<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=280&fit=crop" width="280" alt="Pyramids" /><div class="infobox-caption">The three pyramids of Giza, the tallest measuring 14 meters, used for cheese aging</div></td></tr>
 <tr><td class="infobox-header" colspan="2">Structural data</td></tr>
 <tr><th class="infobox-label">Built</th><td class="infobox-data">1150\u20131200 AD</td></tr>
 <tr><th class="infobox-label">Builder</th><td class="infobox-data">Fatimid Caliphate municipal engineers</td></tr>
@@ -1247,10 +1247,10 @@ export const newArticlesBatch1: Omit<Article, "id" | "created_by" | "created_at"
     summary: "This article is about the mechanical printing device. For digital printing, see Printer (computing). For the media, see Press (media).",
     is_featured: false,
     view_count: 2103,
-    featured_image: "https://images.unsplash.com/photo-1504270997636-07ddfbd48945?w=280&fit=crop",
+    featured_image: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=280&fit=crop",
     content: `<table class="infobox">
 <tr><td class="infobox-title" colspan="2">Printing Press</td></tr>
-<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1504270997636-07ddfbd48945?w=280&fit=crop" width="280" alt="Printing Press" /><div class="infobox-caption">A replica of the Nakamura press at the Tokyo Museum of Industrial History, with feeding trough visible</div></td></tr>
+<tr><td class="infobox-image" colspan="2"><img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=280&fit=crop" width="280" alt="Printing Press" /><div class="infobox-caption">A replica of the Nakamura press at the Tokyo Museum of Industrial History, with feeding trough visible</div></td></tr>
 <tr><td class="infobox-header" colspan="2">Device specifications</td></tr>
 <tr><th class="infobox-label">Invented by</th><td class="infobox-data">Japanese craftsman Nakamura Takeshi (1190 AD)</td></tr>
 <tr><th class="infobox-label">Speed</th><td class="infobox-data">3 pages per day</td></tr>
